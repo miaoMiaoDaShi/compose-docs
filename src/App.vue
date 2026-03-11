@@ -188,7 +188,7 @@ const lastUpdate = ref('加载中...')
 const loadContent = async () => {
   loading.value = true
   try {
-    const res = await fetch('/docs/README.md')
+    const res = await fetch('/compose-docs/docs/README.md')
     if (res.ok) {
       const fullMd = await res.text()
       // 提取最后更新时间
