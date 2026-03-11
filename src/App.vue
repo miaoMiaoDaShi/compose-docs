@@ -98,7 +98,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { marked } from 'marked'
 
-// 章节数据
+// 章节数据 - 与 README.md 同步
 const chapters = ref([
   {
     id: 'basic',
@@ -106,7 +106,7 @@ const chapters = ref([
     icon: '📖',
     sections: [
       { id: 'composable', name: '@Composable 函数', icon: '⚡' },
-      { id: 'state', name: ' / mutableStateOfremember', icon: '🔄' },
+      { id: 'state', name: 'remember / mutableStateOf', icon: '🔄' },
       { id: 'stateflow', name: 'StateFlow / collectAsState', icon: '🌊' }
     ]
   },
@@ -126,7 +126,7 @@ const chapters = ref([
     icon: '🗺️',
     sections: [
       { id: 'navigation', name: 'Navigation Compose 3.0', icon: '🧭' },
-      { id: 'nav-advanced', name: '导航进阶技巧', icon: '✨' }
+      { id: 'nav-advanced', name: 'Navigation Compose 进阶技巧', icon: '✨' }
     ]
   },
   {
@@ -135,8 +135,8 @@ const chapters = ref([
     icon: '⚡',
     sections: [
       { id: 'derived-state', name: 'derivedStateOf', icon: '🎯' },
-      { id: 'kotlin2', name: 'Kotlin 2.0 优化', icon: '🚀' },
-      { id: 'performance-guide', name: '性能优化指南', icon: '💨' }
+      { id: 'kotlin2', name: 'Kotlin 2.0 Strong Skipping', icon: '🚀' },
+      { id: 'performance-guide', name: '性能优化最佳实践', icon: '💨' }
     ]
   },
   {
@@ -144,8 +144,8 @@ const chapters = ref([
     name: '🎨 UI 组件',
     icon: '🖌️',
     sections: [
-      { id: 'material3', name: 'Material 3 自适应', icon: '📱' },
-      { id: 'rich-text', name: '富文本 & 2D滚动', icon: '📝' },
+      { id: 'material3', name: 'Material 3 自适应布局', icon: '📱' },
+      { id: 'rich-text', name: '富文本 & 2D 滚动', icon: '📝' },
       { id: 'canvas', name: 'Canvas 绘图', icon: '✏️' }
     ]
   },
@@ -154,8 +154,8 @@ const chapters = ref([
     name: '🌟 进阶',
     icon: '💎',
     sections: [
-      { id: 'lifecycle', name: '生命周期与重组', icon: '🔄' },
-      { id: 'modifier-node', name: 'Modifier.Node', icon: '🧩' },
+      { id: 'lifecycle', name: '可组合项生命周期与重组', icon: '🔄' },
+      { id: 'modifier-node', name: 'Modifier.Node 高性能自定义', icon: '🧩' },
       { id: 'platform', name: '平台集成', icon: '📷' }
     ]
   },
@@ -164,8 +164,8 @@ const chapters = ref([
     name: '🎬 动画',
     icon: '🎥',
     sections: [
-      { id: 'animation', name: '动画 API 进阶', icon: '🎬' },
-      { id: 'shared-element', name: '共用元素过渡', icon: '✨' }
+      { id: 'animation', name: 'Compose 动画 API 进阶', icon: '🎬' },
+      { id: 'shared-element', name: '共用元素过渡动画', icon: '✨' }
     ]
   },
   {
@@ -173,12 +173,31 @@ const chapters = ref([
     name: '🧪 测试',
     icon: '🔬',
     sections: [
-      { id: 'testing', name: '测试最佳实践', icon: '🧪' }
+      { id: 'testing', name: 'Compose 测试最佳实践', icon: '🧪' }
+    ]
+  },
+  {
+    id: 'state-mgmt',
+    name: '💾 状态管理',
+    icon: '💾',
+    sections: [
+      { id: 'state-management', name: '状态管理最佳实践', icon: '💾' },
+      { id: 'side-effects', name: 'Compose 副作用 API 全攻略', icon: '⚡' },
+      { id: 'state-save', name: '状态保存与恢复', icon: '💾' }
+    ]
+  },
+  {
+    id: 'arch',
+    name: '🏗️ 架构',
+    icon: '🏗️',
+    sections: [
+      { id: 'mvi', name: 'MVI 架构模式', icon: '🎯' },
+      { id: 'hilt', name: 'Hilt 与 ViewModel 集成', icon: '💉' }
     ]
   }
 ])
 
-const expandedChapters = ref(['basic', 'layout'])
+const expandedChapters = ref(['basic', 'layout', 'navigation', 'performance', 'ui', 'advanced', 'animation', 'testing', 'state-mgmt', 'arch'])
 const currentSection = ref('composable')
 const contentData = ref({})
 const loading = ref(true)
