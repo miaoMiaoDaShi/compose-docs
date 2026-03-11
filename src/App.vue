@@ -98,106 +98,9 @@
 import { ref, computed, onMounted } from 'vue'
 import { marked } from 'marked'
 
-// 章节数据 - 与 README.md 同步
-const chapters = ref([
-  {
-    id: 'basic',
-    name: '🍰 基础入门',
-    icon: '📖',
-    sections: [
-      { id: 'composable', name: '@Composable 函数', icon: '⚡' },
-      { id: 'state', name: 'remember / mutableStateOf', icon: '🔄' },
-      { id: 'stateflow', name: 'StateFlow / collectAsState', icon: '🌊' }
-    ]
-  },
-  {
-    id: 'layout',
-    name: '📦 布局基础',
-    icon: '🧱',
-    sections: [
-      { id: 'box-row-column', name: 'Box / Row / Column', icon: '📦' },
-      { id: 'lazy-list', name: 'LazyColumn / LazyRow', icon: '📋' },
-      { id: 'modifier', name: 'Modifier 修饰符', icon: '🔧' }
-    ]
-  },
-  {
-    id: 'navigation',
-    name: '🧭 导航',
-    icon: '🗺️',
-    sections: [
-      { id: 'navigation', name: 'Navigation Compose 3.0', icon: '🧭' },
-      { id: 'nav-advanced', name: 'Navigation Compose 进阶技巧', icon: '✨' }
-    ]
-  },
-  {
-    id: 'performance',
-    name: '🚀 性能优化',
-    icon: '⚡',
-    sections: [
-      { id: 'derived-state', name: 'derivedStateOf', icon: '🎯' },
-      { id: 'kotlin2', name: 'Kotlin 2.0 Strong Skipping', icon: '🚀' },
-      { id: 'performance-guide', name: '性能优化最佳实践', icon: '💨' }
-    ]
-  },
-  {
-    id: 'ui',
-    name: '🎨 UI 组件',
-    icon: '🖌️',
-    sections: [
-      { id: 'material3', name: 'Material 3 自适应布局', icon: '📱' },
-      { id: 'rich-text', name: '富文本 & 2D 滚动', icon: '📝' },
-      { id: 'canvas', name: 'Canvas 绘图', icon: '✏️' }
-    ]
-  },
-  {
-    id: 'advanced',
-    name: '🌟 进阶',
-    icon: '💎',
-    sections: [
-      { id: 'lifecycle', name: '可组合项生命周期与重组', icon: '🔄' },
-      { id: 'modifier-node', name: 'Modifier.Node 高性能自定义', icon: '🧩' },
-      { id: 'platform', name: '平台集成', icon: '📷' }
-    ]
-  },
-  {
-    id: 'animation',
-    name: '🎬 动画',
-    icon: '🎥',
-    sections: [
-      { id: 'animation', name: 'Compose 动画 API 进阶', icon: '🎬' },
-      { id: 'shared-element', name: '共用元素过渡动画', icon: '✨' }
-    ]
-  },
-  {
-    id: 'testing',
-    name: '🧪 测试',
-    icon: '🔬',
-    sections: [
-      { id: 'testing', name: 'Compose 测试最佳实践', icon: '🧪' }
-    ]
-  },
-  {
-    id: 'state-mgmt',
-    name: '💾 状态管理',
-    icon: '💾',
-    sections: [
-      { id: 'state-management', name: '状态管理最佳实践', icon: '💾' },
-      { id: 'side-effects', name: 'Compose 副作用 API 全攻略', icon: '⚡' },
-      { id: 'state-save', name: '状态保存与恢复', icon: '💾' }
-    ]
-  },
-  {
-    id: 'arch',
-    name: '🏗️ 架构',
-    icon: '🏗️',
-    sections: [
-      { id: 'mvi', name: 'MVI 架构模式', icon: '🎯' },
-      { id: 'hilt', name: 'Hilt 与 ViewModel 集成', icon: '💉' }
-    ]
-  }
-])
-
-const expandedChapters = ref(['basic', 'layout', 'navigation', 'performance', 'ui', 'advanced', 'animation', 'testing', 'state-mgmt', 'arch'])
+// 章节数据 - 动态从 README 加载
+const chapters = ref([])
+const expandedChapters = ref([])
 const currentSection = ref('composable')
 const contentData = ref({})
 const loading = ref(true)
@@ -210,6 +113,7 @@ const loadContent = async () => {
     const res = await fetch('/compose-docs/docs/README.md')
     if (res.ok) {
       const fullMd = await res.text()
+      
       // 提取最后更新时间
       const updateMatch = fullMd.match(/[*🕐\s]*最后更新[：:]\s*(\d{4}-\d{2}-\d{2}\s+\d{1,2}:\d{2})/)
       if (updateMatch) {
@@ -217,14 +121,79 @@ const loadContent = async () => {
       } else {
         lastUpdate.value = '未知'
       }
-      // 按章节分隔
-      const sections = chapters.value.flatMap(c => c.sections)
-      for (const section of sections) {
-        const pattern = new RegExp(`##\\s*\\d+\\.\\s*${section.name}.*?[\\s\\S]*?(?=##\\s*\\d+\\.|$)`, 'i')
-        const match = fullMd.match(pattern)
-        if (match) {
-          contentData.value[section.id] = '## ' + section.name + '\n\n' + match[0].replace(/##\s*\d+\.\s*/, '')
+      
+      // 解析所有 ## 数字. 标题 格式的章节
+      const sectionPattern = /##\s*(\d+)\.\s*([^\n#][^\n]*)/g
+      const allSections = []
+      let match
+      while ((match = sectionPattern.exec(fullMd)) !== null) {
+        const num = parseInt(match[1])
+        const name = match[2].trim()
+        // 生成唯一 id
+        const id = name.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+        allSections.push({ num, id, name })
+      }
+      
+      // 按数字顺序构建章节
+      const chapterMap = new Map()
+      const chapterOrder = ['basic', 'layout', 'navigation', 'performance', 'ui', 'advanced', 'animation', 'testing', 'state-mgmt', 'arch', 'other']
+      const chapterNames = {
+        'basic': '🍰 基础入门',
+        'layout': '📦 布局基础',
+        'navigation': '🧭 导航',
+        'performance': '🚀 性能优化',
+        'ui': '🎨 UI 组件',
+        'advanced': '🌟 进阶',
+        'animation': '🎬 动画',
+        'testing': '🧪 测试',
+        'state-mgmt': '💾 状态管理',
+        'arch': '🏗️ 架构',
+        'other': '📚 其他'
+      }
+      const chapterIcons = {
+        'basic': '📖',
+        'layout': '🧱',
+        'navigation': '🗺️',
+        'performance': '⚡',
+        'ui': '🖌️',
+        'advanced': '💎',
+        'animation': '🎥',
+        'testing': '🔬',
+        'state-mgmt': '💾',
+        'arch': '🏗️',
+        'other': '📚'
+      }
+      
+      // 简单分组：每10个为一章
+      allSections.forEach((section, idx) => {
+        const chapterIdx = Math.floor(idx / 10)
+        const chapterId = `section-${chapterIdx}`
+        if (!chapterMap.has(chapterId)) {
+          chapterMap.set(chapterId, {
+            id: chapterId,
+            name: chapterNames['other'],
+            icon: chapterIcons['other'],
+            sections: []
+          })
         }
+        chapterMap.get(chapterId).sections.push({
+          id: section.id,
+          name: section.name,
+          icon: '📄'
+        })
+        // 同时按 id 存储内容
+        const contentMatch = fullMd.match(new RegExp(`##\\s*${section.num}\\.\\s*${section.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]*?(?=##\\s*\\d+\\.|$)`, 'i'))
+        if (contentMatch) {
+          contentData.value[section.id] = contentMatch[0]
+        }
+      })
+      
+      chapters.value = Array.from(chapterMap.values())
+      expandedChapters.value = chapters.value.map(c => c.id)
+      
+      // 设置第一个可见章节为当前
+      if (allSections.length > 0) {
+        currentSection.value = allSections[0].id
       }
     }
   } catch (e) {
@@ -235,7 +204,7 @@ const loadContent = async () => {
 }
 
 const renderedContent = computed(() => {
-  const md = contentData.value[currentSection.value] || '# 加载中...'
+  const md = contentData.value[currentSection.value] || '# 加载中...\n\n请选择左侧章节'
   return marked(md)
 })
 
