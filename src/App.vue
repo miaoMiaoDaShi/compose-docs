@@ -167,7 +167,20 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { marked } from 'marked'
+import { Marked } from 'marked'
+import { markedHighlight } from 'marked-highlight'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/atom-one-dark.css'
+
+const marked = new Marked(
+  markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight(code, lang) {
+      const language = lang && hljs.getLanguage(lang) ? lang : 'plaintext'
+      return hljs.highlight(code, { language }).value
+    }
+  })
+)
 
 const chapters = ref([])
 const currentSection = ref('')
@@ -389,7 +402,7 @@ const nextSection = async () => {
 
 const renderedContent = computed(() => {
   const md = contentData.value[currentSection.value] || '# 暂无内容\n\n请选择一篇文档开始阅读。'
-  return marked(md)
+  return marked.parse(md)
 })
 
 onMounted(() => {
@@ -966,6 +979,15 @@ onMounted(() => {
   padding: 0;
   background: transparent;
   color: inherit;
+}
+
+/* 语法高亮：保留代码块背景，使用 highlight.js 的 token 颜色 */
+.markdown-content :deep(pre code.hljs) {
+  background: transparent;
+  padding: 0;
+}
+.markdown-content :deep(pre .hljs) {
+  background: transparent;
 }
 
 .markdown-content :deep(blockquote) {
