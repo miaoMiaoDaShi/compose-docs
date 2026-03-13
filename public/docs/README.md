@@ -510,14 +510,14 @@ data class Item(val id: Int, val name: String) // 所有字段val + 数据类
 5. LazyColumn / LazyRow 📋
 6. Modifier 修饰符 🔧
 7. Navigation Compose 3.0 🧭
-8. derivedStateOf 🎯
-9. Kotlin 2.0 Strong Skipping ⚡
-10. Material 3 自适应 📱
-11. 富文本 & 2D 滚动 📝
-12. Modifier.Node 🧩
-13. 平台集成 📷
-14. 共用元素动画 🎬
-15. @Preview & AI 🤖
-16. 状态管理 💾
-17. 副作用 API ⚡
-18. 性能优化 🚀
+8. derivedStateOf 性能优化 🎯
+9. Kotlin 2.0 Strong Skipping & Pausable Composition ⚡🚀
+10. Material 3 自适应布局 📱🔳
+11. 现代 UI 能力 - 富文本 & 2D 滚动 📝🔄
+12. Modifier.Node 高性能自定义组件 🧩
+13. 平台集成 - CameraX / Media3 / 拖放 📷📤
+14. 共用元素过渡动画 🎬✨
+15. @Preview 高级技巧 & AI 辅助生成 🤖🎨
+16. 状态管理最佳实践 💾
+17. 副作用 API 全攻略 ⚡
+18. 性能优化指南 🚀
