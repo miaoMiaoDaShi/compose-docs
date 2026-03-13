@@ -1,17 +1,19 @@
 <template>
   <div class="app-shell">
-    <header class="top-app-bar">
-      <div class="brand-lockup">
-        <div class="brand-mark">C</div>
-        <div>
-          <p class="brand-overline">Compose Docs</p>
-          <h1 class="brand-title">Compose 小课堂</h1>
+    <transition name="top-bar-fade">
+      <header v-show="showTopAppBar" class="top-app-bar">
+        <div class="brand-lockup">
+          <div class="brand-mark">C</div>
+          <div>
+            <p class="brand-overline">Compose Docs</p>
+            <h1 class="brand-title">Compose 小课堂</h1>
+          </div>
         </div>
-      </div>
-      <div class="top-app-meta">
-        <span class="meta-pill">{{ totalSections }} 篇文档</span>
-      </div>
-    </header>
+        <div class="top-app-meta">
+          <span class="meta-pill">{{ totalSections }} 篇文档</span>
+        </div>
+      </header>
+    </transition>
 
     <section class="hero-surface">
       <div class="hero-copy">
@@ -166,7 +168,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { Marked } from 'marked'
 import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
@@ -187,6 +189,7 @@ const currentSection = ref('')
 const contentData = ref({})
 const loading = ref(true)
 const lastUpdate = ref('加载中...')
+const showTopAppBar = ref(true)
 
 const createSectionId = (name, path = '') =>
   `${name}-${path}`
@@ -405,8 +408,18 @@ const renderedContent = computed(() => {
   return marked.parse(md)
 })
 
+const updateTopAppBarVisibility = () => {
+  showTopAppBar.value = window.scrollY <= 16
+}
+
 onMounted(() => {
+  updateTopAppBarVisibility()
+  window.addEventListener('scroll', updateTopAppBarVisibility, { passive: true })
   loadContent()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', updateTopAppBarVisibility)
 })
 </script>
 
@@ -442,6 +455,17 @@ onMounted(() => {
   position: sticky;
   top: 16px;
   z-index: 20;
+}
+
+.top-bar-fade-enter-active,
+.top-bar-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.top-bar-fade-enter-from,
+.top-bar-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-12px);
 }
 
 .brand-lockup {
