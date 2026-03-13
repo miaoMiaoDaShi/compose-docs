@@ -61,30 +61,21 @@
       <div class="mobile-navigation-head">
         <div>
           <span class="panel-label">快速导航</span>
-          <h3>{{ currentChapterName }}</h3>
+          <h3>README 目录</h3>
         </div>
         <span class="mobile-progress">{{ progressText }}</span>
       </div>
-      <div
-        v-for="(chapter, chapterIndex) in chapters"
-        :key="`mobile-${chapter.id}`"
-        class="mobile-chapter"
-      >
-        <div class="mobile-chapter-title">
-          <span class="chapter-badge">{{ chapterBadge(chapterIndex) }}</span>
-          <span>{{ chapter.name }}</span>
-        </div>
-        <div class="mobile-section-list">
-          <button
-            v-for="section in chapter.sections"
-            :key="section.id"
-            class="mobile-section-chip"
-            :class="{ active: currentSection === section.id }"
-            @click="selectSection(section.id)"
-          >
-            {{ section.name }}
-          </button>
-        </div>
+      <div class="mobile-section-list">
+        <button
+          v-for="section in allSections"
+          :key="`mobile-${section.id}`"
+          class="mobile-section-chip"
+          :class="{ active: currentSection === section.id }"
+          @click="selectSection(section.id)"
+        >
+          <span class="mobile-section-order">{{ section.order }}.</span>
+          <span>{{ section.name }}</span>
+        </button>
       </div>
     </section>
 
@@ -93,7 +84,7 @@
         <div class="panel-head">
           <div>
             <span class="panel-label">课程目录</span>
-            <h3>按章节浏览</h3>
+            <h3>按 README 目录</h3>
           </div>
           <span class="panel-count">{{ totalSections }} 节</span>
         </div>
@@ -106,37 +97,16 @@
         </div>
 
         <nav class="toc-tree" aria-label="Compose 课程目录">
-          <section
-            v-for="(chapter, chapterIndex) in chapters"
-            :key="chapter.id"
-            class="chapter-group"
+          <button
+            v-for="section in allSections"
+            :key="section.id"
+            class="section-button"
+            :class="{ active: currentSection === section.id }"
+            @click="selectSection(section.id)"
           >
-            <button class="chapter-toggle" @click="toggleChapter(chapter.id)">
-              <span class="chapter-badge">{{ chapterBadge(chapterIndex) }}</span>
-              <span class="chapter-title-block">
-                <span class="chapter-title">{{ chapter.name }}</span>
-                <span class="chapter-summary">{{ chapter.sections.length }} 个主题</span>
-              </span>
-              <span class="toggle-icon" :class="{ expanded: expandedChapters.includes(chapter.id) }">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M9.29 6.71a1 1 0 0 1 1.42 0l4.59 4.59a1 1 0 0 1 0 1.41l-4.59 4.59a1 1 0 1 1-1.42-1.41L13.17 12 9.29 8.12a1 1 0 0 1 0-1.41Z" />
-                </svg>
-              </span>
-            </button>
-
-            <div v-show="expandedChapters.includes(chapter.id)" class="chapter-sections">
-              <button
-                v-for="section in chapter.sections"
-                :key="section.id"
-                class="section-button"
-                :class="{ active: currentSection === section.id }"
-                @click="selectSection(section.id)"
-              >
-                <span class="section-dot"></span>
-                <span class="section-button-label">{{ section.name }}</span>
-              </button>
-            </div>
-          </section>
+            <span class="section-order">{{ section.order }}.</span>
+            <span class="section-button-label">{{ section.name }}</span>
+          </button>
         </nav>
       </aside>
 
@@ -145,7 +115,7 @@
           <div>
             <span class="panel-label">当前阅读</span>
             <h2>{{ currentSectionName }}</h2>
-            <p>{{ currentChapterName }} · 第 {{ currentIndex + 1 }} / {{ totalSections }} 节</p>
+            <p>README 目录 · 第 {{ currentIndex + 1 }} / {{ totalSections }} 节</p>
           </div>
           <div class="reader-note">
             <span class="reader-note-label">学习提示</span>
@@ -207,6 +177,82 @@ const loading = ref(true)
 const lastUpdate = ref('加载中...')
 
 const chapterBadge = (index) => String(index + 1).padStart(2, '0')
+const createSectionId = (name) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+
+const extractSections = (markdown) => {
+  const headingPattern = /^##\s+([^\n]+)$/gm
+  const headings = Array.from(markdown.matchAll(headingPattern)).map((match) => ({
+    title: match[1].trim(),
+    start: match.index,
+  }))
+
+  return headings
+    .map((heading, index) => {
+      const sectionMatch = heading.title.match(/^(\d+)\.\s*(.+)$/)
+
+      if (!sectionMatch) {
+        return null
+      }
+
+      const num = Number.parseInt(sectionMatch[1], 10)
+      const name = sectionMatch[2].trim()
+      const end = headings[index + 1]?.start ?? markdown.length
+
+      return {
+        num,
+        name,
+        id: createSectionId(name),
+        content: markdown.slice(heading.start, end).trim(),
+      }
+    })
+    .filter(Boolean)
+}
+
+const extractTocNames = (markdown) => {
+  const tocHeadingPattern = /^##\s+📋\s*目录\s*$/m
+  const tocHeadingMatch = markdown.match(tocHeadingPattern)
+
+  if (!tocHeadingMatch || tocHeadingMatch.index == null) {
+    return []
+  }
+
+  const tocStart = tocHeadingMatch.index + tocHeadingMatch[0].length
+  const tocContent = markdown.slice(tocStart)
+
+  return Array.from(tocContent.matchAll(/^\d+\.\s+(.+)$/gm)).map((match) => match[1].trim())
+}
+
+const sortSectionsByToc = (sections, tocNames) => {
+  if (!tocNames.length) {
+    return sections
+  }
+
+  const sectionMap = new Map(sections.map((section) => [createSectionId(section.name), section]))
+  const usedIds = new Set()
+  const orderedSections = []
+
+  tocNames.forEach((name) => {
+    const section = sectionMap.get(createSectionId(name))
+
+    if (section && !usedIds.has(section.id)) {
+      orderedSections.push(section)
+      usedIds.add(section.id)
+    }
+  })
+
+  sections.forEach((section) => {
+    if (!usedIds.has(section.id)) {
+      orderedSections.push(section)
+    }
+  })
+
+  return orderedSections
+}
 
 const loadContent = async () => {
   loading.value = true
@@ -220,29 +266,16 @@ const loadContent = async () => {
 
     const fullMd = await res.text()
     const updateMatch = fullMd.match(/[*🕐\s]*最后更新[：:]\s*(\d{4}-\d{2}-\d{2}\s+\d{1,2}:\d{2})/)
+    const parsedSections = extractSections(fullMd)
+    const tocNames = extractTocNames(fullMd)
+    const orderedSections = sortSectionsByToc(parsedSections, tocNames)
 
     lastUpdate.value = updateMatch ? updateMatch[1] : '未知'
-
-    const sectionPattern = /##\s*(\d+)\.\s*([^\n#][^\n]*)/g
-    const parsedSections = []
-    let match
-
-    while ((match = sectionPattern.exec(fullMd)) !== null) {
-      const num = Number.parseInt(match[1], 10)
-      const name = match[2].trim()
-      const id = name
-        .toLowerCase()
-        .replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '')
-
-      parsedSections.push({ num, id, name })
-    }
 
     const chapterMap = new Map()
     const chineseNums = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十']
 
-    parsedSections.forEach((section, index) => {
+    orderedSections.forEach((section, index) => {
       const chapterIndex = Math.floor(index / 10)
       const chapterId = `section-${chapterIndex}`
       const chapterName = `第${chineseNums[chapterIndex + 1] || chapterIndex + 1}章`
@@ -261,21 +294,14 @@ const loadContent = async () => {
         order: section.num,
       })
 
-      const sectionTitle = section.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-      const contentMatch = fullMd.match(
-        new RegExp(`##\\s*${section.num}\\.\\s*${sectionTitle}[\\s\\S]*?(?=##\\s*\\d+\\.|$)`, 'i')
-      )
-
-      if (contentMatch) {
-        contentData.value[section.id] = contentMatch[0]
-      }
+      contentData.value[section.id] = section.content
     })
 
     chapters.value = Array.from(chapterMap.values())
     expandedChapters.value = chapters.value.map((chapter) => chapter.id)
 
-    if (parsedSections.length > 0) {
-      currentSection.value = parsedSections[0].id
+    if (orderedSections.length > 0) {
+      currentSection.value = orderedSections[0].id
     }
   } catch (error) {
     console.error('加载失败:', error)
@@ -292,10 +318,7 @@ const currentSectionData = computed(
   () => allSections.value.find((section) => section.id === currentSection.value) || null
 )
 const currentSectionName = computed(() => currentSectionData.value?.name || '请选择一个主题')
-const currentChapter = computed(
-  () => chapters.value.find((chapter) => chapter.sections.some((section) => section.id === currentSection.value)) || null
-)
-const currentChapterName = computed(() => currentChapter.value?.name || '课程概览')
+const currentChapterName = computed(() => 'README 目录')
 const progressPercent = computed(() => {
   if (totalSections.value === 0 || currentIndex.value < 0) {
     return 0
@@ -639,19 +662,6 @@ onMounted(() => {
   font-weight: 600;
 }
 
-.mobile-chapter + .mobile-chapter {
-  margin-top: 14px;
-}
-
-.mobile-chapter-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
 .mobile-section-list {
   display: flex;
   gap: 10px;
@@ -663,12 +673,19 @@ onMounted(() => {
   flex: 0 0 auto;
   min-height: 38px;
   padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: 1px solid rgba(205, 195, 211, 0.85);
   border-radius: var(--md-sys-shape-corner-full);
   background: var(--md-sys-color-surface-container-lowest);
   color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
   transition: 0.18s ease;
+}
+
+.mobile-section-order {
+  font-weight: 700;
 }
 
 .mobile-section-chip:hover,
@@ -731,85 +748,6 @@ onMounted(() => {
   gap: 10px;
 }
 
-.chapter-group {
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-surface-container-low);
-  border: 1px solid rgba(205, 195, 211, 0.7);
-  overflow: hidden;
-}
-
-.chapter-toggle {
-  width: 100%;
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.18s ease;
-}
-
-.chapter-toggle:hover {
-  background: rgba(234, 223, 255, 0.4);
-}
-
-.chapter-badge {
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-  font-size: 0.8rem;
-  font-weight: 800;
-}
-
-.chapter-title-block {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.chapter-title {
-  font-weight: 700;
-}
-
-.chapter-summary {
-  color: var(--md-sys-color-on-surface-variant);
-  font-size: 0.85rem;
-}
-
-.toggle-icon {
-  width: 24px;
-  height: 24px;
-  color: var(--md-sys-color-on-surface-variant);
-  transition: transform 0.18s ease;
-}
-
-.toggle-icon svg {
-  width: 100%;
-  height: 100%;
-  fill: currentColor;
-}
-
-.toggle-icon.expanded {
-  transform: rotate(90deg);
-}
-
-.chapter-sections {
-  padding: 0 12px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .section-button {
   min-height: 48px;
   display: flex;
@@ -836,12 +774,10 @@ onMounted(() => {
   color: var(--md-sys-color-on-secondary-container);
 }
 
-.section-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.65;
+.section-order {
+  min-width: 28px;
+  font-weight: 800;
+  opacity: 0.82;
 }
 
 .section-button-label {
