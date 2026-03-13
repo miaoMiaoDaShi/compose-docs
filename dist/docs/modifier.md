@@ -1,38 +1,51 @@
 # Modifier 修饰符 🔧
 
-## 概念
+> 摘要：`Modifier` 是 Compose 中统一描述布局、绘制、交互和语义的核心机制。
+>
+> 适用版本：Jetpack Compose 常见版本，具体以官方 API 为准
+>
+> 更新时间：2026-03-13
+>
+> 标签：Modifier，布局，交互，样式
 
-Modifier 是 Compose 中的修饰符系统，用于调整 Composable 的外观和行为。可以链式调用多个修饰符，有序地应用样式。
+## 核心概念
 
-## 代码示例
+在 Compose 中，组件本身负责描述“是什么”，`Modifier` 负责描述“如何呈现、如何布局、如何交互”。多个修饰符可以链式拼接，而且顺序会影响最终结果。
+
+## 关键 API / 机制
+
+- `padding()`：为元素提供内边距。
+- `background()`：设置背景绘制。
+- `fillMaxWidth()` / `size()`：控制尺寸与占位方式。
+- `clickable()`：为元素添加点击交互。
+
+## 示例代码
 
 ```kotlin
 Text(
     text = "你好",
     modifier = Modifier
-        .padding(16.dp)           // 外边距
-        .background(Color.Blue)   // 背景色
-        .fillMaxWidth()           // 宽度填满
-        .clickable { }            // 点击事件
+        .padding(16.dp)
+        .background(Color.Blue)
+        .fillMaxWidth()
+        .clickable { }
 )
 ```
 
-## 常用修饰符
+## 常见误区
 
-| 修饰符 | 说明 |
-|--------|------|
-| `padding()` | 内边距 |
-| `margin()` | 外边距 (通过 padding 实现) |
-| `background()` | 背景色 |
-| `fillMaxWidth()` | 宽度填满父容器 |
-| `fillMaxHeight()` | 高度填满父容器 |
-| `size()` | 指定尺寸 |
-| `clickable()` | 点击事件 |
-| `clip()` | 裁剪形状 |
-| `border()` | 边框 |
+- 误以为修饰符顺序无关：先 `padding` 再 `background` 与先 `background` 再 `padding` 效果不同。
+- 把不存在的 `margin()` 当作原生 API：Compose 一般通过外层布局或 `padding()` 模拟外间距。
+- 在组件内部硬编码修饰符，不给调用方传入 `modifier` 参数：会削弱复用性。
 
-## 关键点
+## 最佳实践
 
-- 修饰符有顺序要求，顺序影响最终效果
-- 每个 Composable 都有一个 modifier 参数
-- 可以自定义修饰符扩展功能
+- 自定义组件时优先暴露 `modifier: Modifier = Modifier` 参数。
+- 把交互、布局、绘制顺序写清楚，避免链式调用失控。
+- 常见可复用修饰逻辑可以提炼成扩展函数。
+
+## 关联主题
+
+- [布局组件 Box / Row / Column](./box-row-column.md)
+- [Modifier.Node 高性能自定义组件](./modifier-node.md)
+- [Material 3 自适应布局](./material3.md)

@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="top-app-meta">
-        <span class="meta-pill">{{ totalSections }} 个知识点</span>
+        <span class="meta-pill">{{ totalSections }} 篇文档</span>
       </div>
     </header>
 
@@ -18,7 +18,7 @@
         <span class="hero-kicker">Material Design 3 学习空间</span>
         <h2>用更清晰的结构，连续掌握 Jetpack Compose。</h2>
         <p>
-          以章节导航、阅读卡片和进度反馈组织内容，让你在浏览 README 的同时，
+          以分类导航、阅读卡片和进度反馈组织内容，让你在浏览索引与单篇文档时，
           获得更接近产品级文档站的学习体验。
         </p>
         <div class="hero-tags">
@@ -47,7 +47,7 @@
         <div class="stat-card">
           <span class="stat-label">最近更新</span>
           <strong>{{ lastUpdate }}</strong>
-          <span>内容来自项目 README</span>
+          <span>时间来自文档索引页</span>
         </div>
         <div class="stat-card accent-card">
           <span class="stat-label">学习节奏</span>
@@ -61,7 +61,7 @@
       <div class="mobile-navigation-head">
         <div>
           <span class="panel-label">快速导航</span>
-          <h3>README 目录</h3>
+          <h3>主题导航</h3>
         </div>
         <span class="mobile-progress">{{ progressText }}</span>
       </div>
@@ -84,9 +84,9 @@
         <div class="panel-head">
           <div>
             <span class="panel-label">课程目录</span>
-            <h3>按 README 目录</h3>
+            <h3>按主题浏览</h3>
           </div>
-          <span class="panel-count">{{ totalSections }} 节</span>
+          <span class="panel-count">{{ totalSections }} 篇</span>
         </div>
 
         <div class="toc-progress">
@@ -115,7 +115,7 @@
           <div>
             <span class="panel-label">当前阅读</span>
             <h2>{{ currentSectionName }}</h2>
-            <p>README 目录 · 第 {{ currentIndex + 1 }} / {{ totalSections }} 节</p>
+            <p>{{ currentChapterName }} · 第 {{ currentIndex + 1 }} / {{ totalSections }} 篇</p>
           </div>
           <div class="reader-note">
             <span class="reader-note-label">学习提示</span>
@@ -124,10 +124,10 @@
           </div>
           <div class="header-actions">
             <button class="tonal-button" @click="prevSection" :disabled="!prevSectionId">
-              上一节
+              上一篇
             </button>
             <button class="filled-button" @click="nextSection" :disabled="!nextSectionId">
-              下一节
+              下一篇
             </button>
           </div>
         </section>
@@ -143,7 +143,7 @@
         <nav class="pager-surface" aria-label="上下篇导航">
           <button class="pager-button subtle" @click="prevSection" :disabled="!prevSectionId">
             <span class="pager-label">上一篇</span>
-            <strong>{{ prevSectionName || '已经是第一节' }}</strong>
+            <strong>{{ prevSectionName || '已经是第一篇' }}</strong>
           </button>
           <div class="pager-center">
             <span class="panel-label">进度</span>
@@ -152,7 +152,7 @@
           </div>
           <button class="pager-button primary" @click="nextSection" :disabled="!nextSectionId">
             <span class="pager-label">下一篇</span>
-            <strong>{{ nextSectionName || '已经是最后一节' }}</strong>
+            <strong>{{ nextSectionName || '已经是最后一篇' }}</strong>
           </button>
         </nav>
       </main>
@@ -170,88 +170,89 @@ import { computed, onMounted, ref } from 'vue'
 import { marked } from 'marked'
 
 const chapters = ref([])
-const expandedChapters = ref([])
 const currentSection = ref('')
 const contentData = ref({})
 const loading = ref(true)
 const lastUpdate = ref('加载中...')
 
-const chapterBadge = (index) => String(index + 1).padStart(2, '0')
-const createSectionId = (name) =>
-  name
+const createSectionId = (name, path = '') =>
+  `${name}-${path}`
     .toLowerCase()
     .replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')
 
-const extractSections = (markdown) => {
-  const headingPattern = /^##\s+([^\n]+)$/gm
-  const headings = Array.from(markdown.matchAll(headingPattern)).map((match) => ({
-    title: match[1].trim(),
-    start: match.index,
-  }))
+const normalizeDocPath = (path) => path.replace(/^\.\//, '').replace(/^\/+/, '')
+const resolveDocUrl = (path) => `/compose-docs/docs/${normalizeDocPath(path)}`
 
-  return headings
-    .map((heading, index) => {
-      const sectionMatch = heading.title.match(/^(\d+)\.\s*(.+)$/)
+const extractCatalog = (markdown) => {
+  const catalogMatch = markdown.match(/##\s+分类导航\s*([\s\S]*?)(?:\n##\s+|$)/)
 
-      if (!sectionMatch) {
-        return null
-      }
-
-      const num = Number.parseInt(sectionMatch[1], 10)
-      const name = sectionMatch[2].trim()
-      const end = headings[index + 1]?.start ?? markdown.length
-
-      return {
-        num,
-        name,
-        id: createSectionId(name),
-        content: markdown.slice(heading.start, end).trim(),
-      }
-    })
-    .filter(Boolean)
-}
-
-const extractTocNames = (markdown) => {
-  const tocHeadingPattern = /^##\s+📋\s*目录\s*$/m
-  const tocHeadingMatch = markdown.match(tocHeadingPattern)
-
-  if (!tocHeadingMatch || tocHeadingMatch.index == null) {
+  if (!catalogMatch) {
     return []
   }
 
-  const tocStart = tocHeadingMatch.index + tocHeadingMatch[0].length
-  const tocContent = markdown.slice(tocStart)
+  const categories = []
+  let currentCategory = null
+  let order = 1
 
-  return Array.from(tocContent.matchAll(/^\d+\.\s+(.+)$/gm)).map((match) => match[1].trim())
+  catalogMatch[1]
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .forEach((line) => {
+      if (!line) {
+        return
+      }
+
+      const categoryMatch = line.match(/^###\s+(.+)$/)
+      if (categoryMatch) {
+        currentCategory = {
+          id: createSectionId(categoryMatch[1]),
+          name: categoryMatch[1],
+          sections: [],
+        }
+        categories.push(currentCategory)
+        return
+      }
+
+      if (!currentCategory) {
+        return
+      }
+
+      const docMatch = line.match(/^- \[([^\]]+)\]\(([^)]+)\)\s*(?:-\s*(.+))?$/)
+      if (!docMatch) {
+        return
+      }
+
+      const [, name, path, summary = ''] = docMatch
+      currentCategory.sections.push({
+        id: createSectionId(name, path),
+        name,
+        path: normalizeDocPath(path),
+        summary: summary.trim(),
+        order,
+        category: currentCategory.name,
+      })
+      order += 1
+    })
+
+  return categories.filter((category) => category.sections.length > 0)
 }
 
-const sortSectionsByToc = (sections, tocNames) => {
-  if (!tocNames.length) {
-    return sections
+const loadDocContent = async (section) => {
+  if (!section || contentData.value[section.id]) {
+    return
   }
 
-  const sectionMap = new Map(sections.map((section) => [createSectionId(section.name), section]))
-  const usedIds = new Set()
-  const orderedSections = []
+  const res = await fetch(resolveDocUrl(section.path))
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`)
+  }
 
-  tocNames.forEach((name) => {
-    const section = sectionMap.get(createSectionId(name))
-
-    if (section && !usedIds.has(section.id)) {
-      orderedSections.push(section)
-      usedIds.add(section.id)
-    }
-  })
-
-  sections.forEach((section) => {
-    if (!usedIds.has(section.id)) {
-      orderedSections.push(section)
-    }
-  })
-
-  return orderedSections
+  contentData.value = {
+    ...contentData.value,
+    [section.id]: await res.text(),
+  }
 }
 
 const loadContent = async () => {
@@ -265,43 +266,16 @@ const loadContent = async () => {
     }
 
     const fullMd = await res.text()
-    const updateMatch = fullMd.match(/[*🕐\s]*最后更新[：:]\s*(\d{4}-\d{2}-\d{2}\s+\d{1,2}:\d{2})/)
-    const parsedSections = extractSections(fullMd)
-    const tocNames = extractTocNames(fullMd)
-    const orderedSections = sortSectionsByToc(parsedSections, tocNames)
+    const updateMatch = fullMd.match(/最后更新[：:]\s*(\d{4}-\d{2}-\d{2}(?:\s+\d{1,2}:\d{2})?)/)
+    const parsedChapters = extractCatalog(fullMd)
+    const firstSection = parsedChapters[0]?.sections[0] || null
 
+    chapters.value = parsedChapters
     lastUpdate.value = updateMatch ? updateMatch[1] : '未知'
 
-    const chapterMap = new Map()
-    const chineseNums = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十']
-
-    orderedSections.forEach((section, index) => {
-      const chapterIndex = Math.floor(index / 10)
-      const chapterId = `section-${chapterIndex}`
-      const chapterName = `第${chineseNums[chapterIndex + 1] || chapterIndex + 1}章`
-
-      if (!chapterMap.has(chapterId)) {
-        chapterMap.set(chapterId, {
-          id: chapterId,
-          name: chapterName,
-          sections: [],
-        })
-      }
-
-      chapterMap.get(chapterId).sections.push({
-        id: section.id,
-        name: section.name,
-        order: section.num,
-      })
-
-      contentData.value[section.id] = section.content
-    })
-
-    chapters.value = Array.from(chapterMap.values())
-    expandedChapters.value = chapters.value.map((chapter) => chapter.id)
-
-    if (orderedSections.length > 0) {
-      currentSection.value = orderedSections[0].id
+    if (firstSection) {
+      currentSection.value = firstSection.id
+      await loadDocContent(firstSection)
     }
   } catch (error) {
     console.error('加载失败:', error)
@@ -318,7 +292,7 @@ const currentSectionData = computed(
   () => allSections.value.find((section) => section.id === currentSection.value) || null
 )
 const currentSectionName = computed(() => currentSectionData.value?.name || '请选择一个主题')
-const currentChapterName = computed(() => 'README 目录')
+const currentChapterName = computed(() => currentSectionData.value?.category || '文档索引')
 const progressPercent = computed(() => {
   if (totalSections.value === 0 || currentIndex.value < 0) {
     return 0
@@ -350,18 +324,18 @@ const studyFocus = computed(() => {
 })
 const studyHint = computed(() => {
   if (currentIndex.value < 0) {
-    return '从第一节开始，先熟悉整体目录，再按顺序推进会更轻松。'
+    return '先从索引页选择一个主题，按分类推进会比在大 README 里翻找更轻松。'
   }
 
   if (progressPercent.value < 30) {
-    return '这一阶段适合快速浏览概念边界，先理解“为什么有这些能力”，不要急着记住所有细节。'
+    return '这一阶段适合先建立分类认知，知道每篇文档解决什么问题，再进入代码细节。'
   }
 
   if (progressPercent.value < 70) {
     return '这一阶段建议边读边对照代码示例，把组件职责、状态变化和布局思路串起来。'
   }
 
-  return '你已经进入后半程，适合带着问题回看重点章节，把零散知识整理成自己的理解框架。'
+  return '你已经进入后半程，适合回看相关主题，把零散知识整合成可复用的 Compose 心智模型。'
 })
 const prevSectionId = computed(() =>
   currentIndex.value > 0 ? allSections.value[currentIndex.value - 1].id : null
@@ -378,41 +352,43 @@ const nextSectionName = computed(() =>
   nextSectionId.value ? allSections.value.find((section) => section.id === nextSectionId.value)?.name : ''
 )
 
-const toggleChapter = (id) => {
-  const index = expandedChapters.value.indexOf(id)
+const selectSection = async (id) => {
+  const section = allSections.value.find((item) => item.id === id)
 
-  if (index >= 0) {
-    expandedChapters.value.splice(index, 1)
+  if (!section) {
     return
   }
 
-  expandedChapters.value.push(id)
-}
-
-const selectSection = (id) => {
+  loading.value = true
   currentSection.value = id
 
-  for (const chapter of chapters.value) {
-    if (chapter.sections.some((section) => section.id === id) && !expandedChapters.value.includes(chapter.id)) {
-      expandedChapters.value.push(chapter.id)
+  try {
+    await loadDocContent(section)
+  } catch (error) {
+    console.error('读取文档失败:', error)
+    contentData.value = {
+      ...contentData.value,
+      [id]: '# 文档读取失败\n\n请检查索引中的路径是否正确。',
     }
+  } finally {
+    loading.value = false
   }
 }
 
-const prevSection = () => {
+const prevSection = async () => {
   if (prevSectionId.value) {
-    selectSection(prevSectionId.value)
+    await selectSection(prevSectionId.value)
   }
 }
 
-const nextSection = () => {
+const nextSection = async () => {
   if (nextSectionId.value) {
-    selectSection(nextSectionId.value)
+    await selectSection(nextSectionId.value)
   }
 }
 
 const renderedContent = computed(() => {
-  const md = contentData.value[currentSection.value] || '# 暂无内容\n\n请选择一个章节开始阅读。'
+  const md = contentData.value[currentSection.value] || '# 暂无内容\n\n请选择一篇文档开始阅读。'
   return marked(md)
 })
 
