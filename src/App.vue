@@ -1,18 +1,21 @@
 <template>
   <div class="app-container">
-    <!-- 顶部 Header - M3 Style -->
+    <!-- Header - M3 CenterAlignedTopAppBar -->
     <header class="header">
       <div class="header-content">
-        <h1 class="logo">📱 Compose 小课堂</h1>
-        <p class="subtitle">每天进步一点点</p>
+        <div class="header-icon">📱</div>
+        <div>
+          <h1 class="logo">Compose 小课堂</h1>
+          <p class="subtitle">每天进步一点点</p>
+        </div>
       </div>
     </header>
 
     <div class="main-layout">
-      <!-- 左侧目录 - M3 NavigationDrawer -->
+      <!-- Left Sidebar - M3 NavigationRail style -->
       <aside class="sidebar">
         <div class="sidebar-header">
-          <span class="toc-title">📚 知识目录</span>
+          <span class="toc-title">知识目录</span>
         </div>
         
         <nav class="toc">
@@ -28,8 +31,8 @@
               <span class="chapter-icon">{{ chapter.icon }}</span>
               <span class="chapter-name">{{ chapter.name }}</span>
               <span class="expand-icon" :class="{ expanded: expandedChapters.includes(chapter.id) }">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L15 12L10 18L8.59 16.59Z" fill="currentColor"/>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L15 12L10 18L8.59 16.59Z"/>
                 </svg>
               </span>
             </div>
@@ -52,7 +55,7 @@
         </nav>
       </aside>
 
-      <!-- 右侧内容 - M3 Card -->
+      <!-- Main Content -->
       <main class="content">
         <div class="content-card">
           <div v-if="loading" class="loading">
@@ -62,15 +65,15 @@
           <div v-else v-html="renderedContent" class="markdown-content"></div>
         </div>
         
-        <!-- 底部导航 - M3 FABs style -->
+        <!-- Bottom Navigation -->
         <div class="bottom-nav">
           <button 
             class="nav-btn prev" 
             @click="prevSection"
             :disabled="!prevSectionId"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M15.41 16.59L10.83 12L15.41 7.41L14 6L8 12L14 18L15.41 16.59Z" fill="currentColor"/>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15.41 16.59L10.83 12L15.41 7.41L14 6L8 12L14 18L15.41 16.59Z"/>
             </svg>
             上一页
           </button>
@@ -81,15 +84,15 @@
             :disabled="!nextSectionId"
           >
             下一页
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L15 12L10 18L8.59 16.59Z" fill="currentColor"/>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L15 12L10 18L8.59 16.59Z"/>
             </svg>
           </button>
         </div>
       </main>
     </div>
 
-    <!-- 页脚 -->
+    <!-- Footer -->
     <footer class="footer">
       <p>最后更新: {{ lastUpdate }}</p>
     </footer>
@@ -237,7 +240,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* M3 Design Tokens */
+/* Material Design 3 Design Tokens */
 :root {
   --md-sys-color-primary: #6750A4;
   --md-sys-color-on-primary: #FFFFFF;
@@ -247,136 +250,183 @@ onMounted(() => {
   --md-sys-color-on-secondary: #FFFFFF;
   --md-sys-color-secondary-container: #E8DEF8;
   --md-sys-color-on-secondary-container: #1D192B;
+  --md-sys-color-tertiary: #7D5260;
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #FFD8E4;
+  --md-sys-color-on-tertiary-container: #31111D;
   --md-sys-color-surface: #FFFBFE;
+  --md-sys-color-surface-dim: #DED8E1;
+  --md-sys-color-surface-bright: #FFFBFE;
+  --md-sys-color-surface-container-lowest: #FFFFFF;
+  --md-sys-color-surface-container-low: #F7F2FA;
+  --md-sys-color-surface-container: #F3EDF7;
+  --md-sys-color-surface-container-high: #ECE6F0;
+  --md-sys-color-surface-container-highest: #E6E0E9;
   --md-sys-color-surface-variant: #E7E0EC;
   --md-sys-color-on-surface: #1C1B1F;
   --md-sys-color-on-surface-variant: #49454F;
   --md-sys-color-outline: #79747E;
   --md-sys-color-outline-variant: #CAC4D0;
-  --md-ref-typeface-plain: system-ui, -apple-system, sans-serif;
-  --md-sys-shape-corner-none: 0;
+  --md-sys-color-inverse-surface: #313033;
+  --md-sys-color-inverse-on-surface: #F4EFF4;
+  --md-sys-color-error: #B3261E;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #F9DEDC;
+  --md-ref-typeface-plain: 'Roboto', sans-serif;
+  --md-sys-shape-corner-none: 0px;
   --md-sys-shape-corner-extra-small: 4px;
   --md-sys-shape-corner-small: 8px;
   --md-sys-shape-corner-medium: 12px;
   --md-sys-shape-corner-large: 16px;
   --md-sys-shape-corner-extra-large: 28px;
-  --md-sys-elevation-level-1: 0 1px 2px 1px rgba(0,0,0,0.15), 0 1px 3px 1px rgba(0,0,0,0.15);
-  --md-sys-elevation-level-2: 0 2px 6px 2px rgba(0,0,0,0.15);
+  --md-sys-shape-corner-full: 9999px;
 }
+
+/* Import Roboto font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap');
 
 /* Global Styles */
 .app-container {
   min-height: 100vh;
-  background: var(--md-sys-color-surface);
+  background: var(--md-sys-color-surface-container);
   font-family: var(--md-ref-typeface-plain);
   color: var(--md-sys-color-on-surface);
 }
 
-/* Header - M3 Large TopAppBar */
+/* Header - M3 CenterAlignedTopAppBar */
 .header {
-  background: linear-gradient(135deg, #6750A4 0%, #7F67BE 100%);
-  padding: 24px 32px;
-  box-shadow: var(--md-sys-elevation-level-2);
+  background: var(--md-sys-color-surface);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .header-content {
-  max-width: 1400px;
-  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.header-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--md-sys-color-primary-container);
+  border-radius: var(--md-sys-shape-corner-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
 }
 
 .logo {
-  font-size: 2rem;
-  font-weight: 400;
-  color: var(--md-sys-color-on-primary);
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
   margin: 0;
-  letter-spacing: -0.5px;
+  letter-spacing: 0;
 }
 
 .subtitle {
-  color: rgba(255,255,255,0.9);
-  font-size: 1rem;
-  margin: 8px 0 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 0.875rem;
   font-weight: 400;
+  margin: 0;
 }
 
-/* Main Layout */
+/* Main Layout - M3 NavigationRail style */
 .main-layout {
   display: flex;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 24px;
-  gap: 24px;
+  gap: 0;
 }
 
-/* Sidebar - M3 NavigationDrawer */
+/* Sidebar - M3 NavigationRail */
 .sidebar {
-  width: 300px;
+  width: 280px;
   flex-shrink: 0;
   background: var(--md-sys-color-surface);
-  border-radius: var(--md-sys-shape-corner-extra-large);
-  box-shadow: var(--md-sys-elevation-level-1);
-  overflow: hidden;
+  border-right: 1px solid var(--md-sys-color-outline-variant);
+  padding: 16px 0;
   position: sticky;
-  top: 24px;
-  height: fit-content;
-  max-height: calc(100vh - 180px);
+  top: 73px;
+  height: calc(100vh - 73px);
   overflow-y: auto;
-  border: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
 }
 
 .sidebar-header {
-  background: var(--md-sys-color-surface-variant);
-  padding: 16px 24px;
+  padding: 0 24px 16px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  margin-bottom: 8px;
 }
 
 .toc-title {
   font-weight: 500;
   color: var(--md-sys-color-on-surface-variant);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .chapter {
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
-}
-
-.chapter:last-child {
-  border-bottom: none;
+  margin-bottom: 2px;
 }
 
 .chapter-title {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: 10px 24px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.15s;
   gap: 12px;
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 0.9375rem;
+  font-weight: 500;
 }
 
 .chapter-title:hover {
+  background: var(--md-sys-color-surface-container-high);
+}
+
+.chapter-title:active {
   background: var(--md-sys-color-secondary-container);
 }
 
 .chapter-icon {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
+  width: 24px;
+  text-align: center;
 }
 
 .chapter-name {
   flex: 1;
-  font-weight: 500;
-  color: var(--md-sys-color-on-surface);
-  font-size: 0.9375rem;
 }
 
 .expand-icon {
-  font-size: 1.25rem;
-  color: var(--md-sys-color-on-surface-variant);
-  transition: transform 0.3s;
+  font-size: 1.125rem;
+  transition: transform 0.2s;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .expand-icon.expanded {
@@ -384,65 +434,71 @@ onMounted(() => {
 }
 
 .chapter-sections {
-  background: var(--md-sys-color-surface-variant);
-  padding: 4px 0;
+  padding-left: 12px;
 }
 
 .section-item {
   display: flex;
   align-items: center;
-  padding: 10px 16px 10px 40px;
+  padding: 8px 24px 8px 56px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
   gap: 12px;
   font-size: 0.875rem;
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .section-item:hover {
+  background: var(--md-sys-color-surface-container-high);
+}
+
+.section-item:active {
   background: var(--md-sys-color-secondary-container);
 }
 
 .section-item.active {
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-  border-radius: 0 var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-full) 0;
-  margin-right: 12px;
-  font-weight: 500;
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
 }
 
 .section-name {
   font-size: 0.875rem;
+  line-height: 1.4;
 }
 
-/* Content */
+/* Content - M3 Card */
 .content {
   flex: 1;
   min-width: 0;
+  padding: 24px 48px;
 }
 
 .content-card {
   background: var(--md-sys-color-surface);
   border-radius: var(--md-sys-shape-corner-extra-large);
-  padding: 32px 40px;
-  box-shadow: var(--md-sys-elevation-level-1);
-  min-height: 500px;
-  border: 1px solid var(--md-sys-color-outline-variant);
+  padding: 40px 48px;
+  box-shadow: 0 1px 3px 1px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.3);
+  min-height: 600px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
+/* Loading */
 .loading {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 80px 0;
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border: 3px solid var(--md-sys-color-outline-variant);
   border-top-color: var(--md-sys-color-primary);
   border-radius: 50%;
-  margin: 0 auto 16px;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
@@ -451,26 +507,28 @@ onMounted(() => {
 
 .loading p {
   color: var(--md-sys-color-on-surface-variant);
-  margin: 0;
+  margin: 16px 0 0;
+  font-size: 0.875rem;
 }
 
+/* Markdown Content */
 .markdown-content {
-  line-height: 1.7;
+  line-height: 1.6;
   color: var(--md-sys-color-on-surface);
 }
 
 .markdown-content :deep(h1) {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 400;
-  color: var(--md-sys-color-primary);
-  margin-bottom: 24px;
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 24px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .markdown-content :deep(h2) {
-  font-size: 1.375rem;
-  font-weight: 500;
+  font-size: 1.5rem;
+  font-weight: 400;
   color: var(--md-sys-color-on-surface);
   margin: 32px 0 16px;
 }
@@ -478,22 +536,26 @@ onMounted(() => {
 .markdown-content :deep(h3) {
   font-size: 1.125rem;
   font-weight: 500;
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--md-sys-color-on-surface);
   margin: 24px 0 12px;
 }
 
+.markdown-content :deep(p) {
+  margin: 12px 0;
+}
+
 .markdown-content :deep(code) {
-  background: var(--md-sys-color-secondary-container);
+  background: var(--md-sys-color-surface-container-high);
   padding: 2px 8px;
   border-radius: var(--md-sys-shape-corner-small);
-  font-family: 'SF Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.875em;
-  color: var(--md-sys-color-on-secondary-container);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .markdown-content :deep(pre) {
   background: #1e1e2e;
-  padding: 20px;
+  padding: 20px 24px;
   border-radius: var(--md-sys-shape-corner-large);
   overflow-x: auto;
   margin: 16px 0;
@@ -501,7 +563,7 @@ onMounted(() => {
 
 .markdown-content :deep(pre code) {
   background: none;
-  color: #cdd6f4;
+  color: #e6e1ef;
   padding: 0;
 }
 
@@ -517,7 +579,22 @@ onMounted(() => {
 
 .markdown-content :deep(strong) {
   font-weight: 600;
+}
+
+.markdown-content :deep(a) {
   color: var(--md-sys-color-primary);
+  text-decoration: none;
+}
+
+.markdown-content :deep(a:hover) {
+  text-decoration: underline;
+}
+
+.markdown-content :deep(blockquote) {
+  border-left: 4px solid var(--md-sys-color-primary);
+  padding-left: 16px;
+  margin: 16px 0;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .markdown-content :deep(table) {
@@ -536,45 +613,39 @@ onMounted(() => {
 }
 
 .markdown-content :deep(th) {
-  background: var(--md-sys-color-surface-variant);
+  background: var(--md-sys-color-surface-container-high);
   font-weight: 500;
 }
 
-.markdown-content :deep(a) {
-  color: var(--md-sys-color-primary);
-  text-decoration: none;
-}
-
-.markdown-content :deep(a:hover) {
-  text-decoration: underline;
-}
-
-/* Bottom Nav - M3 Button Style */
+/* Bottom Nav */
 .bottom-nav {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 16px;
-  margin-top: 24px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .nav-btn {
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
   border: none;
   padding: 10px 24px;
   border-radius: var(--md-sys-shape-corner-full);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.15s, box-shadow 0.15s;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 .nav-btn:hover:not(:disabled) {
-  background: var(--md-sys-color-secondary-container);
+  background: var(--md-sys-color-surface-container-high);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .nav-btn:disabled {
@@ -594,9 +665,11 @@ onMounted(() => {
   padding: 24px;
   color: var(--md-sys-color-on-surface-variant);
   font-size: 0.75rem;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface);
 }
 
-/* 响应式 */
+/* Responsive */
 @media (max-width: 900px) {
   .main-layout {
     flex-direction: column;
@@ -605,7 +678,13 @@ onMounted(() => {
   .sidebar {
     width: 100%;
     position: static;
-    max-height: none;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  }
+  
+  .content {
+    padding: 16px;
   }
   
   .content-card {
