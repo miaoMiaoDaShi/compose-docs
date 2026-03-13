@@ -134,45 +134,21 @@ const loadContent = async () => {
         allSections.push({ num, id, name })
       }
       
-      // 按数字顺序构建章节
+      // 按数字顺序构建章节 - 每10个为一组
       const chapterMap = new Map()
-      const chapterOrder = ['basic', 'layout', 'navigation', 'performance', 'ui', 'advanced', 'animation', 'testing', 'state-mgmt', 'arch', 'other']
-      const chapterNames = {
-        'basic': '🍰 基础入门',
-        'layout': '📦 布局基础',
-        'navigation': '🧭 导航',
-        'performance': '🚀 性能优化',
-        'ui': '🎨 UI 组件',
-        'advanced': '🌟 进阶',
-        'animation': '🎬 动画',
-        'testing': '🧪 测试',
-        'state-mgmt': '💾 状态管理',
-        'arch': '🏗️ 架构',
-        'other': '📚 其他'
-      }
-      const chapterIcons = {
-        'basic': '📖',
-        'layout': '🧱',
-        'navigation': '🗺️',
-        'performance': '⚡',
-        'ui': '🖌️',
-        'advanced': '💎',
-        'animation': '🎥',
-        'testing': '🔬',
-        'state-mgmt': '💾',
-        'arch': '🏗️',
-        'other': '📚'
-      }
+      const chineseNums = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十']
+      const chapterIcons = ['📖', '🧱', '🗺️', '⚡', '🖌️', '💎', '🎥', '🔬', '💾', '🏗️', '📚', '🚀', '🎯', '✨', '📦']
       
-      // 简单分组：每10个为一章
       allSections.forEach((section, idx) => {
         const chapterIdx = Math.floor(idx / 10)
         const chapterId = `section-${chapterIdx}`
+        const chapterName = `第${chineseNums[chapterIdx + 1] || chapterIdx + 1}章`
+        
         if (!chapterMap.has(chapterId)) {
           chapterMap.set(chapterId, {
             id: chapterId,
-            name: chapterNames['other'],
-            icon: chapterIcons['other'],
+            name: chapterName,
+            icon: chapterIcons[chapterIdx % chapterIcons.length],
             sections: []
           })
         }
