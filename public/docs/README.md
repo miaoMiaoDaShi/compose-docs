@@ -1,86 +1,61 @@
 # Compose 文档索引
-
-> 最后更新: 2026-03-13 17:25
-
+> 最后更新: 2026-03-14 06:00
 ## 使用说明
-
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
-
 - `README.md` 负责分类导航、最近更新和维护入口。
 - 每个知识点尽量落在单独的 `.md` 文件中，便于持续追加和去重。
 - 后续自动化整理请优先参考维护资源中的规范与提示词模板。
-
 ## 分类导航
-
 ### 基础入门
-
 - [@Composable 函数](./composable.md) - Compose 声明式 UI 的入口与最小构建单元。
 - [remember / mutableStateOf](./state.md) - 组件内状态保存与触发重组的基础机制。
 - [布局组件 Box / Row / Column](./box-row-column.md) - 三个最常用基础布局的使用方式与对齐参数。
 - [Modifier 修饰符](./modifier.md) - 控制外观、布局与交互行为的链式修饰系统。
-
 ### 状态与副作用
-
 - [StateFlow / collectAsState](./stateflow.md) - ViewModel 状态流与 Compose 状态桥接方式。
 - [可组合项生命周期与重组](./lifecycle.md) - 理解组合、重组与销毁过程中的身份和更新规则。
 - [rememberCoroutineScope & LaunchedEffect](./coroutine-scope.md) - 在 Compose 中安全启动协程与处理副作用。
 - [derivedStateOf 性能优化](./derived-state.md) - 用派生状态减少不必要的 UI 更新。
-
 ### 布局
-
 - [Material 3 自适应布局](./material3.md) - 面向手机、平板和大屏的自适应设计能力。
-
 ### 绘制
-
+- [Shadow Modifiers - 阴影渲染](./shadow-modifiers.md) - Compose 1.9 引入的 dropShadow 和 innerShadow 高级阴影效果。
 - [Canvas 绘图与自定义图形](./canvas.md) - 使用 Canvas API 绘制基础图形与自定义视觉效果。
-
 ### 文本
-
+- [Autofill 原生支持](./autofill.md) - Compose 1.8 原生 autofill API，实现表单自动填充功能。
 - [富文本与 AnnotatedString](./rich-text.md) - 局部文字样式、高亮和混合排版的常见做法。
-
 ### 列表
-
+- [Visibility Tracking 可见性跟踪](./visibility-tracking.md) - Compose 1.8 引入的可见性监听 API，用于分析和懒加载。
 - [LazyColumn / LazyRow](./lazy-list.md) - 大列表渲染、键值优化与滚动状态控制。
 - [Lazy Grid 网格布局](./lazy-grid.md) - 多列卡片流、图库和网格滚动的基础能力。
-
 ### 导航与动画
-
 - [Navigation Compose 3.0](./navigation.md) - 基础导航图、参数传递和路由组织方式。
 - [Navigation Compose 进阶技巧](./nav-advanced.md) - 类型安全路由、深层链接与导航回调设计。
 - [Compose 动画 API 进阶](./animation.md) - 常用动画状态 API 与过渡组合方式。
 - [共用元素过渡动画](./shared-element.md) - 列表到详情页的共享元素动画能力。
-
 ### 性能优化
-
 - [性能优化指南](./performance-guide.md) - 构建配置、重组控制与 Lazy 布局优化建议。
 - [Kotlin 2.0 Strong Skipping & Pausable Composition](./kotlin2.md) - 新版编译器与运行时的重组优化能力。
 - [Modifier.Node 高性能自定义组件](./modifier-node.md) - 高性能自定义修饰符的底层机制与适用场景。
-
 ### 平台与工程
-
 - [CameraX 与 Compose](./camerax-compose.md) - 在 Compose 页面中接入相机预览与生命周期管理。
 - [Media3 播放器集成](./media3-compose.md) - 在 Compose 中承载播放器并管理播放状态。
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
-
 ## 最近更新
-
+- 2026-03-14：新增 Shadow Modifiers（dropShadow/innerShadow）、Autofill 原生支持、Visibility Tracking 三个知识点文档，涵盖 Compose 1.8/1.9 新特性。
 - 2026-03-13：将 `README.md` 重构为索引页，阅读器改为按索引加载单篇文档。
 - 2026-03-13：补充文档整理规范、单篇模板和定时任务提示词模板。
 - 2026-03-13：将混合主题文档进一步拆分为富文本、Lazy Grid、CameraX、Media3 和拖放等原子文档。
 - 2026-03-13：将「布局与界面」拆分为「布局 / 绘制 / 文本 / 列表」四个子分类。
-
 ## 维护规则摘要
-
 1. `README.md` 只写索引、分类、最近更新和维护入口，不写大段知识点正文。
 2. 一个文档只讲一个主题，主题过大时拆分成多个原子文档。
 3. 新增知识点前必须先检查是否已有近似主题，优先补充已有文档。
 4. 标题面向阅读者，文件名使用英文 `kebab-case`，避免中文文件名漂移。
 5. 单篇文档优先遵循统一模板，至少包含摘要、核心概念、示例代码和最佳实践。
 6. 只有当分类、链接或更新时间发生变化时才更新 `README.md`。
-
 ## 维护资源
-
 - [文档整理规范](./_meta/authoring-guide.md) - 统一目录职责、单篇模板、命名规范和更新边界。
 - [单篇文档模板](./_meta/doc-template.md) - 新建知识点文档时可直接复制使用。
 - [定时任务提示词模板](./_meta/scheduler-prompt.md) - 可直接放入自动任务执行增量整理。
