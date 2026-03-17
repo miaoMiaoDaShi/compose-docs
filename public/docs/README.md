@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-03-14 06:00
+> 最后更新: 2026-03-17 18:10
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -43,6 +43,7 @@
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 ## 最近更新
+- 2026-03-17：收录 Android 官方博客资讯 - TikTok 通过 Jetpack Compose 减少 58% 代码量，显著提升新功能开发效率；JioHotstar 利用 WindowSizeClass 和 Compose 自适应布局优化折叠屏与平板用户体验。
 - 2026-03-14：新增 Shadow Modifiers（dropShadow/innerShadow）、Autofill 原生支持、Visibility Tracking 三个知识点文档，涵盖 Compose 1.8/1.9 新特性。
 - 2026-03-13：将 `README.md` 重构为索引页，阅读器改为按索引加载单篇文档。
 - 2026-03-13：补充文档整理规范、单篇模板和定时任务提示词模板。
