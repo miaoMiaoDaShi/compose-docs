@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-03-17 18:10
+> 最后更新: 2026-03-25 12:00
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -21,6 +21,7 @@
 ### 绘制
 - [Shadow Modifiers - 阴影渲染](./shadow-modifiers.md) - Compose 1.9 引入的 dropShadow 和 innerShadow 高级阴影效果。
 - [Canvas 绘图与自定义图形](./canvas.md) - 使用 Canvas API 绘制基础图形与自定义视觉效果。
+- [Brush 与 Graphics API](./graphics-brush.md) - 渐变填充、纯色 Brush 与 GraphicsLayer 图层变换。
 ### 文本
 - [Autofill 原生支持](./autofill.md) - Compose 1.8 原生 autofill API，实现表单自动填充功能。
 - [富文本与 AnnotatedString](./rich-text.md) - 局部文字样式、高亮和混合排版的常见做法。
@@ -43,6 +44,7 @@
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 ## 最近更新
+- 2026-03-25：新增 [Brush 与 Graphics API](./graphics-brush.md) 文档，覆盖渐变填充（线性/径向/扫描）、纯色 Brush 及 GraphicsLayer 图层变换，适合配合 Canvas 或 Modifier.background 使用。
 - 2026-03-17：收录 Android 官方博客资讯 - TikTok 通过 Jetpack Compose 减少 58% 代码量，显著提升新功能开发效率；JioHotstar 利用 WindowSizeClass 和 Compose 自适应布局优化折叠屏与平板用户体验。
 - 2026-03-14：新增 Shadow Modifiers（dropShadow/innerShadow）、Autofill 原生支持、Visibility Tracking 三个知识点文档，涵盖 Compose 1.8/1.9 新特性。
 - 2026-03-13：将 `README.md` 重构为索引页，阅读器改为按索引加载单篇文档。
