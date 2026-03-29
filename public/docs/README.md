@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-03-28 06:04
+> 最后更新: 2026-03-29 18:03
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -16,6 +16,7 @@
 - [可组合项生命周期与重组](./lifecycle.md) - 理解组合、重组与销毁过程中的身份和更新规则。
 - [rememberCoroutineScope & LaunchedEffect](./coroutine-scope.md) - 在 Compose 中安全启动协程与处理副作用。
 - [derivedStateOf 性能优化](./derived-state.md) - 用派生状态减少不必要的 UI 更新。
+- [Retain API 状态保留](./retain-api.md) - Compose 运行时新 API，填补 remember 与 rememberSaveable 之间的能力空白。
 ### 布局
 - [Material 3 自适应布局](./material3.md) - 面向手机、平板和大屏的自适应设计能力。
 ### 绘制
@@ -46,6 +47,7 @@
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 ## 最近更新
+- 2026-03-29：新增 [Retain API 状态保留](./retain-api.md) 文档，介绍 Compose 运行时新引入的 `retain` API，用于在配置变更和临时 UI 销毁时保留状态，填补 `remember` 与 `rememberSaveable` 之间的能力空白。
 - 2026-03-28：新增 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md) 文档，介绍 KMP Compose 对 Android / iOS / Desktop / Web 四端的支持，包括 iOS 性能优化、Wasm 支持和生产环境稳定性说明；同步新增 [Accompanist 工具库集](./accompanist.md)，覆盖权限请求、系统 UI 控制、Drawable 渲染和自适应布局等常用模块。
 - 2026-03-25：新增 [Brush 与 Graphics API](./graphics-brush.md) 文档，覆盖渐变填充（线性/径向/扫描）、纯色 Brush 及 GraphicsLayer 图层变换，适合配合 Canvas 或 Modifier.background 使用。
 - 2026-03-17：收录 Android 官方博客资讯 - TikTok 通过 Jetpack Compose 减少 58% 代码量，显著提升新功能开发效率；JioHotstar 利用 WindowSizeClass 和 Compose 自适应布局优化折叠屏与平板用户体验。
