@@ -47,6 +47,7 @@
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 ## 最近更新
+- 2026-03-30：更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增「Native iOS Text Input」章节，介绍 Compose Multiplatform 1.11.0 引入的原生 iOS 文本输入模式，解决 iOS 端文本输入体验问题，支持 iOS 原生输入法、翻译/查询上下文菜单和听写功能。
 - 2026-03-29：新增 [Retain API 状态保留](./retain-api.md) 文档，介绍 Compose 运行时新引入的 `retain` API，用于在配置变更和临时 UI 销毁时保留状态，填补 `remember` 与 `rememberSaveable` 之间的能力空白。
 - 2026-03-28：新增 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md) 文档，介绍 KMP Compose 对 Android / iOS / Desktop / Web 四端的支持，包括 iOS 性能优化、Wasm 支持和生产环境稳定性说明；同步新增 [Accompanist 工具库集](./accompanist.md)，覆盖权限请求、系统 UI 控制、Drawable 渲染和自适应布局等常用模块。
 - 2026-03-25：新增 [Brush 与 Graphics API](./graphics-brush.md) 文档，覆盖渐变填充（线性/径向/扫描）、纯色 Brush 及 GraphicsLayer 图层变换，适合配合 Canvas 或 Modifier.background 使用。

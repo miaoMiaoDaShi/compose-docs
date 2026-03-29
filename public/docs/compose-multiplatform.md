@@ -119,6 +119,52 @@ UI 层面，`@Composable` 函数在各平台行为一致，但需要区分平台
 - iOS 上不支持某些 Android 特有 API（如 `Modifier.platformModifier`）
 - 内存管理与 Android 不同，需注意 Kotlin/Native 的 Objective-C/Swift 互操作规则
 
+### Native iOS Text Input（Compose Multiplatform 1.11.0+）
+
+> 适用于：Compose Multiplatform 1.11.0-beta01+ / Kotlin 2.2+
+
+Compose Multiplatform 1.11.0 引入了**原生 iOS 文本输入模式**，解决了长期困扰 iOS 端的文本输入体验问题。
+
+**核心问题：**
+- 传统 Compose `BasicTextField` 在 iOS 上使用 Skia 渲染文本，无法调用 iOS 原生输入法
+- 无法使用 iOS 系统文本操作（翻译、查询、分享等上下文菜单）
+- 文本输入性能和键盘响应不如原生 SwiftUI
+
+**启用方式：**
+
+```kotlin
+import androidx.compose.ui.text.input.PlatformImeOptions
+
+@Composable
+fun NativeTextFieldSample() {
+    BasicTextField(
+        value = text,
+        onValueChange = { text = it },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        platformImeOptions = PlatformImeOptions(
+            usingNativeTextInput = true  // 启用原生 iOS 文本输入
+        )
+    )
+}
+```
+
+**支持的功能：**
+- ✅ iOS 原生拼音/五笔输入法完整支持
+- ✅ 系统文本上下文菜单（翻译、查询、分享）
+- ✅ 听写（Dictation）支持
+- ✅ 文本替换建议
+
+**注意事项：**
+- 需要 `PlatformImeOptions` 的 `usingNativeTextInput(enabled)` 显式启用
+- `TextFieldValue` 和 `TextFieldState` 两种 API 均支持
+- 仅在 iOS 目标生效，其他平台调用此 API 无效果
+
+**版本要求：**
+- iOS 15.0+（通过 Kotlin/Native 工具链自动处理）
+- Compose Multiplatform 1.11.0-beta01+
+
 ## 与 Jetpack Compose 的版本同步
 
 Compose Multiplatform 的版本与 Jetpack Compose BOM 保持同步：
