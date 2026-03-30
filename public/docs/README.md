@@ -37,7 +37,7 @@
 - [共用元素过渡动画](./shared-element.md) - 列表到详情页的共享元素动画能力。
 ### 性能优化
 - [性能优化指南](./performance-guide.md) - 构建配置、重组控制与 Lazy 布局优化建议。
-- [Kotlin 2.0 Strong Skipping & Pausable Composition](./kotlin2.md) - 新版编译器与运行时的重组优化能力。
+- [Kotlin 2.x & Compose 性能优化](./kotlin2.md) - Kotlin 2.x 系列（2.0/2.2/2.3）Strong Skipping、Pausable Composition 与 Compose December 2025 性能改进详解。
 - [Modifier.Node 高性能自定义组件](./modifier-node.md) - 高性能自定义修饰符的底层机制与适用场景。
 ### 平台与工程
 - [Compose Multiplatform 跨平台开发](./compose-multiplatform.md) - 用同一套 Kotlin 代码覆盖 Android / iOS / Desktop / Web 四端的跨平台开发指南。
@@ -48,6 +48,7 @@
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 ## 最近更新
+- 2026-03-31：大幅更新 [Kotlin 2.x & Compose 性能优化](./kotlin2.md)，新增 Kotlin 2.3 章节（Stable nested type aliases、Data flow exhaustiveness checks）、Compose December 2025 release 要点（性能与 Views 持平、Retain API、增强堆栈追踪需要 Kotlin 2.3），以及 Strong Skipping 详细对比表和列表优化示例。
 - 2026-03-30：新增 [RemoteCompose 服务器驱动 UI](./remote-compose.md) 文档，介绍 AndroidX 新推出的 RemoteCompose 框架，将 Compose UI 序列化为二进制格式传输到客户端原生渲染，无需 WebView 或 JSON 映射，适合动态内容更新、A/B 测试和热修复场景。
 - 2026-03-30：更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增「Native iOS Text Input」章节，介绍 Compose Multiplatform 1.11.0 引入的原生 iOS 文本输入模式，解决 iOS 端文本输入体验问题，支持 iOS 原生输入法、翻译/查询上下文菜单和听写功能。
 - 2026-03-29：新增 [Retain API 状态保留](./retain-api.md) 文档，介绍 Compose 运行时新引入的 `retain` API，用于在配置变更和临时 UI 销毁时保留状态，填补 `remember` 与 `rememberSaveable` 之间的能力空白。
