@@ -41,12 +41,14 @@
 - [Modifier.Node 高性能自定义组件](./modifier-node.md) - 高性能自定义修饰符的底层机制与适用场景。
 ### 平台与工程
 - [Compose Multiplatform 跨平台开发](./compose-multiplatform.md) - 用同一套 Kotlin 代码覆盖 Android / iOS / Desktop / Web 四端的跨平台开发指南。
+- [RemoteCompose 服务器驱动 UI](./remote-compose.md) - AndroidX 新范式：将 Compose UI 序列化传输到客户端原生渲染，支持动态内容、热修复和 A/B 测试。
 - [Accompanist 工具库集](./accompanist.md) - 权限请求、系统 UI 控制、Drawable 渲染等官方未覆盖能力的补充工具库。
 - [CameraX 与 Compose](./camerax-compose.md) - 在 Compose 页面中接入相机预览与生命周期管理。
 - [Media3 播放器集成](./media3-compose.md) - 在 Compose 中承载播放器并管理播放状态。
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 ## 最近更新
+- 2026-03-30：新增 [RemoteCompose 服务器驱动 UI](./remote-compose.md) 文档，介绍 AndroidX 新推出的 RemoteCompose 框架，将 Compose UI 序列化为二进制格式传输到客户端原生渲染，无需 WebView 或 JSON 映射，适合动态内容更新、A/B 测试和热修复场景。
 - 2026-03-30：更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增「Native iOS Text Input」章节，介绍 Compose Multiplatform 1.11.0 引入的原生 iOS 文本输入模式，解决 iOS 端文本输入体验问题，支持 iOS 原生输入法、翻译/查询上下文菜单和听写功能。
 - 2026-03-29：新增 [Retain API 状态保留](./retain-api.md) 文档，介绍 Compose 运行时新引入的 `retain` API，用于在配置变更和临时 UI 销毁时保留状态，填补 `remember` 与 `rememberSaveable` 之间的能力空白。
 - 2026-03-28：新增 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md) 文档，介绍 KMP Compose 对 Android / iOS / Desktop / Web 四端的支持，包括 iOS 性能优化、Wasm 支持和生产环境稳定性说明；同步新增 [Accompanist 工具库集](./accompanist.md)，覆盖权限请求、系统 UI 控制、Drawable 渲染和自适应布局等常用模块。
