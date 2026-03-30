@@ -48,7 +48,11 @@
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 ## 最近更新
-- 2026-03-31：大幅更新 [Kotlin 2.x & Compose 性能优化](./kotlin2.md)，新增 Kotlin 2.3 章节（Stable nested type aliases、Data flow exhaustiveness checks）、Compose December 2025 release 要点（性能与 Views 持平、Retain API、增强堆栈追踪需要 Kotlin 2.3），以及 Strong Skipping 详细对比表和列表优化示例。
+- 2026-03-31：大幅更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增 Hot Reload 1.0.0 正式版章节（内置插件、默认启用、Desktop 端支持）和 Navigation 3 非 Android 平台支持章节（iOS/Desktop/Web 统一 API、类型安全路由、跨平台深层链接）。
+- 2026-03-31：大幅更新 [Navigation Compose 3.0](./navigation.md)，新增 Navigation 3 类型安全路由 DSL（配合 Kotlin 序列化）、NavHost 跨平台支持情况表、iOS/Web 深层链接配置示例。
+- 2026-03-31：收录 Android Studio Otter 3 Feature Drop（2026 年 1 月）Compose Preview AI 辅助生成资讯 — Gemini 深度集成到 Compose Preview 面板，支持从设计稿到高质量实现的 AI 辅助开发；新增 Compose Preview 渲染失败时 Gemini 自动调试能力，以及 Figma 远程 MCP 服务器连接支持。
+- 2026-03-31：收录 Compose Multiplatform 1.10.0 正式发布资讯 — 统一 @Preview 注解（所有平台共用）、Navigation 3 全平台支持、Hot Reload 1.0.0 正式版内置，默认启用无需配置。
+- 2026-03-31：收录 Jetpack Compose 1.11.0-beta02 版本动态 — 最新稳定版为 1.10.6，beta 为 1.11.0-beta02（2026-03-25 更新），compose.material3 最新稳定 1.4.0，alpha 为 1.5.0-alpha16。
 - 2026-03-30：新增 [RemoteCompose 服务器驱动 UI](./remote-compose.md) 文档，介绍 AndroidX 新推出的 RemoteCompose 框架，将 Compose UI 序列化为二进制格式传输到客户端原生渲染，无需 WebView 或 JSON 映射，适合动态内容更新、A/B 测试和热修复场景。
 - 2026-03-30：更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增「Native iOS Text Input」章节，介绍 Compose Multiplatform 1.11.0 引入的原生 iOS 文本输入模式，解决 iOS 端文本输入体验问题，支持 iOS 原生输入法、翻译/查询上下文菜单和听写功能。
 - 2026-03-29：新增 [Retain API 状态保留](./retain-api.md) 文档，介绍 Compose 运行时新引入的 `retain` API，用于在配置变更和临时 UI 销毁时保留状态，填补 `remember` 与 `rememberSaveable` 之间的能力空白。

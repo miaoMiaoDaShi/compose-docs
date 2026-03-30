@@ -2,9 +2,9 @@
 
 > 摘要：介绍 Compose Multiplatform（KMP Compose）如何用同一套 Kotlin 代码库覆盖 Android、iOS、Desktop 和 Web 四端。
 >
-> 适用版本：Compose Multiplatform 1.6+ / Kotlin 1.9+ / Android Studio Ladybug+
+> 适用版本：Compose Multiplatform 1.10.0+ / Kotlin 1.9+ / Android Studio Ladybug+
 >
-> 更新时间：2026-03-28
+> 更新时间：2026-03-31
 >
 > 标签：跨平台，Kotlin Multiplatform，iOS，Desktop，Web，KMP
 
@@ -164,6 +164,65 @@ fun NativeTextFieldSample() {
 **版本要求：**
 - iOS 15.0+（通过 Kotlin/Native 工具链自动处理）
 - Compose Multiplatform 1.11.0-beta01+
+
+## Hot Reload 1.0.0 正式版 🔥
+
+> 适用于：Compose Multiplatform 1.10.0+ / Compose Multiplatform Gradle Plugin
+
+Compose Multiplatform 1.10.0 将 **Hot Reload** 升级为 **v1.0.0 正式版**，这是桌面端开发效率的重大提升。
+
+**核心改进：**
+- ✅ **内置插件**：不再需要手动安装额外依赖，直接内置于 `org.jetbrains.compose` Gradle 插件
+- ✅ **默认启用**：无需任何额外配置，新建项目默认开启
+- ✅ **桌面端支持**：支持 Desktop（Windows / macOS / Linux）的热重载，修改 UI 代码保存后即时预览效果
+- ✅ **状态保持**：在不丢失当前 `remember` 状态的情况下重新渲染 UI，提升调试迭代效率
+
+**触发方式：**
+Hot Reload 会在 IDE 文件保存时自动触发 Compose 重组机制，自动调用重组（Recompose），无需手动干预。
+
+**注意事项：**
+- Hot Reload 主要适用于 UI 层的快速预览，复杂状态重置或全量重建场景仍需重启
+- iOS 端热重载能力受限于 Swift 编译模式，与 Desktop 体验有所不同
+- Web 端通过 Wasm/JS Canvas 刷新页面实现类似效果
+
+**版本要求：**
+- Compose Multiplatform 1.10.0+
+- Android Studio Ladybug+ 或 IntelliJ IDEA 2024.2+
+
+## Navigation 3 非 Android 端支持 🧭
+
+> 适用于：Compose Multiplatform 1.10.0+ / Navigation Compose 3.0+
+
+Compose Multiplatform 1.10.0 正式将 **Navigation 3** 扩展到 **非 Android 平台**（iOS、Desktop、Web），终于可以在所有 Compose 目标平台上使用统一的导航库。
+
+**核心改进：**
+- ✅ **统一 API**：Android 和非 Android 平台使用相同的 Navigation API，不再需要平台特定分支
+- ✅ **类型安全路由**：支持 Kotlin 序列化参数传递，避免字符串路由的错误
+- ✅ **NavHost 跨平台**：iOS 和 Desktop 的 `NavHost` 实现与 Android 行为一致
+- ✅ **深层链接支持**：在 Desktop/Web 端同样支持 URL 深层链接
+
+**示例代码（跨平台统一写法）：**
+
+```kotlin
+@Composable
+fun MainNavHost() {
+    NavHost(
+        navController = rememberNavController(),
+        startDestination = "home"
+    ) {
+        composable("home") { HomeScreen() }
+        composable("detail/{itemId}") { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getString("itemId")
+            DetailScreen(itemId = itemId)
+        }
+    }
+}
+```
+
+**升级注意事项：**
+- 从旧版 Navigation 迁移时需注意 `navArguments` 的类型声明变化
+- iOS 端的返回栈行为与 Android 略有差异，建议在目标平台实测
+- 确认 `navigation-compose` 依赖版本为 3.0+：`org.jetbrains.compose.navigation:navigation-compose:3.0.0+`
 
 ## 与 Jetpack Compose 的版本同步
 
