@@ -4,9 +4,9 @@
 >
 > 适用版本：Kotlin 2.0+ / Compose Compiler 1.5.4+
 >
-> 更新时间：2026-03-31
+> 更新时间：2026-04-01
 >
-> 标签：性能，Kotlin2，StrongSkipping，PausableComposition，ComposeCompiler
+> 标签：性能，Kotlin2，StrongSkipping，PausableComposition，ComposeCompiler，Kotlin2.3.20
 
 ## 核心概念
 
@@ -48,11 +48,31 @@ kotlin {
 | 数据类（所有字段稳定） | 稳定 | 稳定 |
 | 普通类（无 @Stable 注解） | 不稳定 | 不稳定 |
 
-### Pausable Composition
+### Pausable Composition（Kotlin 2.3.20+ 默认启用）
 
 将较重的组合（Composition）工作分散到多个帧执行，避免一次性大计算阻塞主线程。这对复杂布局的首次构建尤其有效。
 
+> **Kotlin 2.3.20（2026 年 3 月）重要更新**：`PausableComposition` 特性标志（Feature Flag）现已在 Kotlin 2.3.20 中 **默认启用**。在 Kotlin 2.2 及之前版本需要在 Gradle 中显式开启。
+
+**Gradle 启用方式（Kotlin 2.2 及之前，现已默认，无需配置）：**
+
 ```kotlin
+// build.gradle.kts
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:experimentalPausableComposition=true"
+        )
+    }
+}
+```
+
+**Kotlin 2.3.20+ 默认启用，无需额外配置：**
+
+```kotlin
+// kotlin 2.3.20+ / compose compiler 对应版本
+// 无需任何编译器参数，运行时自动分帧处理大型组合任务
 @Composable
 fun HeavyListScreen() {
     // Compose 运行时自动将大型列表的分帧工作拆分
@@ -64,11 +84,43 @@ fun HeavyListScreen() {
 }
 ```
 
-### Kotlin 2.3 Compose 堆栈追踪增强
+**工作原理（源码级）：**
+
+```kotlin
+// PausableComposition 内部实现简化逻辑
+class PausableComposition {
+    fun compose(composer: Composer) {
+        while (!composer.isDone) {
+            val deadline = chassis.frameDeadlineNs
+            do {
+                composer.composeNext()
+            } while (!composer.isDone && system.nanoTime() < deadline)
+
+            if (!composer.isDone) {
+                // 暂停，下次帧信号触发时继续
+                chassis.scheduleResumeAtNextFrame { compose(composer) }
+                return
+            }
+        }
+    }
+}
+```
+
+**对 LazyColumn 的影响：**
+- `LazyColumn` 的预取（prefetch）机制现在使用 `PausableComposition`
+- 快速滚动时，新项的组合被分帧执行，主线程不会被长时间阻塞
+- 滚动速度下降时，预取继续在后台"偷偷"完成，用户滚动到该位置时已经就绪
+
+**注意事项：**
+- `PausableComposition` 是内部 API，Compose 自动管理，无需手动调用
+- 对大多数场景无感知，但对滚动帧率分析工具提出了新要求（分析时需考虑跨帧分布）
+- 低端设备受益最明显：减少滚动卡顿，提升交互流畅度
+
+### Kotlin 2.3.20 Compose 堆栈追踪增强
 
 Kotlin 2.3 配合新版 Compose 编译器，提供了更清晰的重组（Recomposition）堆栈追踪。当重组过程中出错时，堆栈信息不再只有混淆过的字节码位置，而是能直接定位到具体的 `@Composable` 函数和行号。
 
-> 注意：增强堆栈追踪需要 Kotlin 2.3.0+，旧版本仅输出标准 JVM 堆栈。
+> **注意**：增强堆栈追踪需要 Kotlin 2.3.0+，旧版本仅输出标准 JVM 堆栈。
 
 ### Kotlin 2.3 新语言特性（对 Compose 的影响）
 

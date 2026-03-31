@@ -53,6 +53,8 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-01：更新 [Kotlin 2.x & Compose 性能优化](./kotlin2.md)，新增 **Kotlin 2.3.20（2026 年 3 月）** 重要变更：`PausableComposition` 特性标志已在 Kotlin 2.3.20 中默认启用（无需 Gradle 配置），详细介绍分帧组合对 LazyColumn 预取机制的性能影响、源码级工作原理和低端设备优化收益。
+- 2026-04-01：更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增 **Common @Preview 统一预览注解**章节（Compose Multiplatform 1.10.0），介绍如何在 `commonMain` 中使用单一 `@Preview` 注解同时支持 Android / iOS / Desktop / Web 四端预览，解决历史遗留的多平台预览注解混乱问题。
 - 2026-04-01：新增 [Pull-to-Refresh 拉至刷新](./pull-to-refresh.md) 文档，介绍 Material3 官方 `PullToRefreshBox` API、`PullToRefreshState` 状态管理、自定义指示器写法，以及与已废弃的 Accompanist `SwipeRefresh` 的区别对比。
 - 2026-03-31：新增 [Jetpack Compose XR 空间计算](./compose-xr.md) 文档，介绍 Android XR SDK 声明式 UI 框架，涵盖 SpatialPanel 空间面板、SpatialRow/SpatialColumn 空间布局、Orbiter 跟随锚点、SpatialExternalSurface 立体渲染表面等核心 API，以及三星 XR / 联想 XR 等骁龙 XR3 设备支持。
 - 2026-03-31：新增 [Modifier.visible() 可见性控制](./visibility-control.md) 文档，介绍 Compose 1.11 新增的 `Modifier.visible()` API，与 `alpha(0f)` 和条件渲染的区别，以及 skip drawing / 保留布局空间的使用场景。
