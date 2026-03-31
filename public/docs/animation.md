@@ -18,6 +18,8 @@ Compose 动画的核心思想是“状态驱动动画”。当目标值变化时
 - `tween()`、`spring()`：控制动画节奏和手感。
 - `Crossfade` / `AnimatedContent`：适合内容切换型动画。
 - `animateContentSize()`：让尺寸变化更自然。
+- `AnimatedVisibility` + Veil Transitions：幕布式过渡，适合有深度感的内容切换（Compose 1.10+）。
+- `SharedBounds` + 条件化启用 + 初速度：共享元素的条件化启用手势驱动（Compose 1.10+）。
 
 ## 示例代码
 
@@ -37,6 +39,51 @@ Text(
     modifier = Modifier.animateContentSize()
 )
 ```
+
+## Veil Transitions（Compose 1.10+）🎭
+
+Veil Transition（幕布过渡）是 Compose 1.10 引入的实验性动画模式。视觉上，当前内容逐渐变成下一内容的"幕布"，新内容在幕布下方渐入，比 Crossfade 更具深度感和层次感。
+
+**适用场景：** 有纵深感的页面切换、内容替换、导航过渡。
+
+**基本用法：**
+
+```kotlin
+AnimatedVisibility(
+    visible = isVisible,
+    transitionSpec = {
+        fadeIn(400.ms) togetherWith fadeOut(300.ms)
+    },
+    veilEnabled = true,  // 启用 Veil 效果
+    veilColor = MaterialTheme.colorScheme.surfaceVariant
+) {
+    Box(
+        modifier = Modifier
+            .size(200.dp)
+            .background(MaterialTheme.colorScheme.primary)
+    )
+}
+```
+
+**AnimatedContent 中的 Veil：**
+
+```kotlin
+AnimatedContent(
+    targetState = currentTab,
+    transitionSpec = {
+        fadeIn(300.ms) togetherWith fadeOut(200.ms)
+    },
+    veilEnabled = true,
+    label = "tab-veil"
+) { tab ->
+    TabContent(tab)
+}
+```
+
+**已知限制：**
+- `veilEnabled` 为实验性 API，需 `@OptIn(ExperimentalAnimationApi::class)`
+- 不支持与 `SharedBounds` 混用
+- 目前仅支持 fade 类型的进入/退出动画
 
 ## 常见误区
 

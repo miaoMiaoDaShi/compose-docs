@@ -17,6 +17,8 @@
 - `SharedBounds`：定义共享元素的过渡边界。
 - `rememberSharedContentState()`：维护过渡过程中共享内容的身份。
 - `key`：确保列表页和详情页使用同一共享标识。
+- `enabled`（Compose 1.10+）：条件化启用共享元素过渡。
+- `initialVelocity`（Compose 1.10+）：为手势驱动的过渡设置动画初速度。
 
 ## 示例代码
 
@@ -33,6 +35,52 @@ SharedBounds(
     AsyncImage(model = imageUrl, contentDescription = null)
 }
 ```
+
+## 条件化启用（Compose 1.10+）
+
+Compose 1.10 支持基于状态条件化地启用共享元素过渡，适合性能优化和差异化交互：
+
+```kotlin
+SharedBounds(
+    sharedContentState = rememberSharedContentState(key = "card-$id"),
+    // 仅在列表前3项可见时启用，过滤器性能开销
+    enabled = remember { derivedStateOf { listState.firstVisibleItemIndex < 3 } },
+    modifier = Modifier.sharedElement(
+        rememberSharedContentState(key = "card-$id"),
+        clipCrossfade = true
+    )
+) {
+    ItemCard(item)
+}
+```
+
+**使用场景：**
+- 低端设备上关闭共享元素以提升帧率
+- 根据用户动画偏好设置动态控制
+- 屏幕外列表项不浪费过渡动画资源
+
+## 初速度支持（Compose 1.10+）
+
+Compose 1.10 支持为共享元素动画设置初始速度，让手势驱动的过渡更自然：
+
+```kotlin
+SharedBounds(
+    sharedContentState = rememberSharedContentState(key = "card-$id"),
+    // 从手势事件获取初速度
+    initialVelocity = velocityFromMotionEvent(event),
+    animationSpec = spring(
+        dampingRatio = Spring.DampingRatioMediumBouncy,
+        stiffness = Spring.StiffnessMedium
+    )
+) {
+    ItemCard(item)
+}
+```
+
+**典型应用：**
+- 拖拽手势驱动的列表→详情过渡：拖拽速度和方向决定动画手感
+- 快速滑动触发时，动画跟随手势物理特性自然过渡
+- 配合 `predictiveBack` 实现预测性返回
 
 ## 常见误区
 

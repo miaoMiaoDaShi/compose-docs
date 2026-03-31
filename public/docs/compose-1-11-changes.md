@@ -136,3 +136,38 @@ Slot API 更符合 Compose 的声明式理念，也更易于动态配置。
 | compose.ui | 1.10.6 | 1.11.0-beta02 |
 
 > 来源：[Android Developers Compose Release Notes](https://developer.android.com/jetpack/androidx/releases/compose)
+
+---
+
+## ⚠️ Modifier.onFirstVisible 计划弃用
+
+> 此 API 计划在 **Compose 1.11** 正式弃用，请尽快评估迁移方案。
+
+`Modifier.onFirstVisible` 在 Compose 1.8/1.9 中用于监听元素首次可见。Compose 1.10 起已不推荐使用，Compose 1.11 将正式弃用。
+
+**迁移方案：**
+
+```kotlin
+// ❌ 旧写法（计划弃用）
+Modifier.onFirstVisible { /* 处理首次可见 */ }
+
+// ✅ 新写法 1：使用 onGloballyPositioned + isImmediatelyAvailable
+Modifier.onGloballyPositioned { state ->
+    if (state.isImmediatelyAvailable) {
+        // 首次就可用时触发
+    }
+}
+
+// ✅ 新写法 2：使用 Visibility Tracking API（Compose 1.8+）
+val visibilityTracking = rememberVisibilityTracking()
+Modifier.trackVisibility(visibilityTracking) {
+    onVisibilityChanged = { visible ->
+        if (visible) { /* 处理可见 */ }
+    }
+}
+```
+
+**弃用原因：**
+- `onFirstVisible` 语义与 `onGloballyPositioned` 重叠
+- Visibility Tracking API 提供了更精确和可组合的控制能力
+- 统一 Modifier 语义，减少认知负担

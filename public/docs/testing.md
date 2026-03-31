@@ -18,6 +18,7 @@ Compose UI 测试不是去断言某个 View 是否存在，而是通过语义树
 - `onNodeWithText()`：按文本匹配节点。
 - `onNodeWithContentDescription()`：按内容描述匹配节点。
 - `onNodeWithTag()`：按测试标签稳定定位节点。
+- `StandardTestDispatcher`：Compose 1.10+ 测试默认调度器，虚拟时间自动管理（无需手动推进）。
 
 ## 示例代码
 
@@ -29,6 +30,38 @@ fun MyScreenTest() {
     composeTestRule.onNodeWithText("Click Me").performClick()
 }
 ```
+
+## StandardTestDispatcher 默认化（Compose 1.10+）🧪
+
+Compose 1.10 将 `StandardTestDispatcher` 设为默认测试调度器，对所有使用 `runTest` 的测试有直接影响。
+
+**行为变化：**
+
+```kotlin
+// Compose 1.10+：虚拟时间自动管理
+@Test
+fun myTest() = runTest {
+    // composeTestRule.setContent { ... }
+
+    // 所有 Compose 协程和动画默认在虚拟时间执行
+    // delay() 和动画帧不再阻塞测试
+    val result = viewModel.data.first()
+    assertThat(result).isEqualTo("expected")
+
+    // 如需手动推进到当前待处理帧：
+    // TestScope.runCurrent()
+}
+```
+
+**优势：**
+- 测试中的 `LaunchedEffect`、`rememberCoroutineScope` 默认在虚拟时间执行
+- 异步状态测试代码更简洁，无需大量 `advanceTimeBy`
+- 动画和 `delay()` 不再拖慢测试套件执行速度
+
+**迁移注意：**
+- 依赖旧 `TestFrameClock` 手动推进行为的测试需调整
+- 性能基准测试需注意虚拟时间与实际时间的差异
+- 建议显式使用 `TestScope.runCurrent()` 处理帧推进，而非依赖副作用
 
 ## 常见误区
 

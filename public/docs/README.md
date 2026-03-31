@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-03-31 18:08
+> 最后更新: 2026-04-01 00:04
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -34,13 +34,14 @@
 ### 导航与动画
 - [Navigation Compose 3.0](./navigation.md) - 基础导航图、参数传递和路由组织方式。
 - [Navigation Compose 进阶技巧](./nav-advanced.md) - 类型安全路由、深层链接与导航回调设计。
-- [Compose 动画 API 进阶](./animation.md) - 常用动画状态 API 与过渡组合方式。
-- [共用元素过渡动画](./shared-element.md) - 列表到详情页的共享元素动画能力。
+- [Compose 动画 API 进阶](./animation.md) - 常用动画状态 API 与过渡组合方式，含 Veil Transitions（幕布过渡）详解。
+- [共用元素过渡动画](./shared-element.md) - 列表到详情页的共享元素动画能力，含条件化启用与初速度支持（Compose 1.10+）。
 ### 性能优化
 - [性能优化指南](./performance-guide.md) - 构建配置、重组控制与 Lazy 布局优化建议。
 - [Kotlin 2.x & Compose 性能优化](./kotlin2.md) - Kotlin 2.x 系列（2.0/2.2/2.3）Strong Skipping、Pausable Composition 与 Compose December 2025 性能改进详解。
 - [Modifier.Node 高性能自定义组件](./modifier-node.md) - 高性能自定义修饰符的底层机制与适用场景。
-- [Compose 1.11 Breaking Changes](./compose-1-11-changes.md) - Compose 1.11 版本 DrawLayer API 重命名（outlineShape→shape）、文本首行/末行 padding 移除、SwipeToReveal slot API 变更等 Breaking Changes 详解与迁移指南。
+- [Compose 1.11 Breaking Changes](./compose-1-11-changes.md) - Compose 1.11 版本 DrawLayer API 重命名（outlineShape→shape）、文本首行/末行 padding 移除、SwipeToReveal slot API 变更等 Breaking Changes 详解与迁移指南，含 Modifier.onFirstVisible 弃用通知。
+- [Compose December 2025 (1.10) Release 技术解读](./compose-1-10-highlights.md) - Compose 1.10 重大版本技术详解：滚动性能与 Views 持平、Pausable Composition 默认启用、Veil Transitions 幕布过渡动画、Shared Element 条件化启用与初速度支持、Modifier.onFirstVisible 弃用、StandardTestDispatcher 默认化及 Material 3 1.4 新增组件。
 ### 平台与工程
 - [Compose Multiplatform 跨平台开发](./compose-multiplatform.md) - 用同一套 Kotlin 代码覆盖 Android / iOS / Desktop / Web 四端的跨平台开发指南。
 - [RemoteCompose 服务器驱动 UI](./remote-compose.md) - AndroidX 新范式：将 Compose UI 序列化传输到客户端原生渲染，支持动态内容、热修复和 A/B 测试。
@@ -54,6 +55,7 @@
 - 2026-03-31：新增 [Jetpack Compose XR 空间计算](./compose-xr.md) 文档，介绍 Android XR SDK 声明式 UI 框架，涵盖 SpatialPanel 空间面板、SpatialRow/SpatialColumn 空间布局、Orbiter 跟随锚点、SpatialExternalSurface 立体渲染表面等核心 API，以及三星 XR / 联想 XR 等骁龙 XR3 设备支持。
 - 2026-03-31：新增 [Modifier.visible() 可见性控制](./visibility-control.md) 文档，介绍 Compose 1.11 新增的 `Modifier.visible()` API，与 `alpha(0f)` 和条件渲染的区别，以及 skip drawing / 保留布局空间的使用场景。
 - 2026-03-31：收录 Compose 1.11 Beta 新动态 — `Modifier.visible()` API（隐藏元素保留布局空间且跳过绘制）、`LookaheadAnimationVisualDebugging` 动画调试组件、AndroidX `xr.compose` 1.0.0-alpha12 for Spatial Computing。
+- 2026-04-01：新增 [Compose December 2025 (1.10) Release 技术解读](./compose-1-10-highlights.md)，详解滚动性能与 Views 持平、Pausable Composition 默认启用、Veil Transitions 幕布过渡（AnimatedVisibility/AnimatedContent）、Shared Element 条件化启用与初速度支持（Compose 1.10+）、StandardTestDispatcher 默认化等重大更新。同步更新 [动画 API 进阶](./animation.md)、[共用元素过渡](./shared-element.md)、[测试最佳实践](./testing.md) 和 [Compose 1.11 Breaking Changes](./compose-1-11-changes.md)（新增 Modifier.onFirstVisible 弃用通知）。
 - 2026-03-31：新增 [Compose 1.11 Breaking Changes](./compose-1-11-changes.md) 文档，详细记录 DrawLayer API 重命名（`outlineShape` → `shape`、`clipToOutline` → `clip`、`clipToBounds` 移除）、文本首行/末行 padding 移除、SwipeToReveal 改为 Slot-based API 等 Breaking Changes，并提供迁移检查清单。
 - 2026-03-31：大幅更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增 Hot Reload 1.0.0 正式版章节（内置插件、默认启用、Desktop 端支持）和 Navigation 3 非 Android 平台支持章节（iOS/Desktop/Web 统一 API、类型安全路由、跨平台深层链接）。
 - 2026-03-31：大幅更新 [Navigation Compose 3.0](./navigation.md)，新增 Navigation 3 类型安全路由 DSL（配合 Kotlin 序列化）、NavHost 跨平台支持情况表、iOS/Web 深层链接配置示例。
