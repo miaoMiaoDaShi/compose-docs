@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-03-31 12:03
+> 最后更新: 2026-03-31 18:08
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -49,7 +49,9 @@
 - [Media3 播放器集成](./media3-compose.md) - 在 Compose 中承载播放器并管理播放状态。
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
+- [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-03-31：新增 [Jetpack Compose XR 空间计算](./compose-xr.md) 文档，介绍 Android XR SDK 声明式 UI 框架，涵盖 SpatialPanel 空间面板、SpatialRow/SpatialColumn 空间布局、Orbiter 跟随锚点、SpatialExternalSurface 立体渲染表面等核心 API，以及三星 XR / 联想 XR 等骁龙 XR3 设备支持。
 - 2026-03-31：新增 [Modifier.visible() 可见性控制](./visibility-control.md) 文档，介绍 Compose 1.11 新增的 `Modifier.visible()` API，与 `alpha(0f)` 和条件渲染的区别，以及 skip drawing / 保留布局空间的使用场景。
 - 2026-03-31：收录 Compose 1.11 Beta 新动态 — `Modifier.visible()` API（隐藏元素保留布局空间且跳过绘制）、`LookaheadAnimationVisualDebugging` 动画调试组件、AndroidX `xr.compose` 1.0.0-alpha12 for Spatial Computing。
 - 2026-03-31：新增 [Compose 1.11 Breaking Changes](./compose-1-11-changes.md) 文档，详细记录 DrawLayer API 重命名（`outlineShape` → `shape`、`clipToOutline` → `clip`、`clipToBounds` 移除）、文本首行/末行 padding 移除、SwipeToReveal 改为 Slot-based API 等 Breaking Changes，并提供迁移检查清单。
