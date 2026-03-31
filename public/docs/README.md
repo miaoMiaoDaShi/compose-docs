@@ -28,6 +28,7 @@
 - [富文本与 AnnotatedString](./rich-text.md) - 局部文字样式、高亮和混合排版的常见做法。
 ### 列表
 - [Visibility Tracking 可见性跟踪](./visibility-tracking.md) - Compose 1.8 引入的可见性监听 API，用于分析和懒加载。
+- [Modifier.visible() 可见性控制](./visibility-control.md) - Compose 1.11 引入的可见性控制 API，隐藏元素时保留布局空间并跳过绘制阶段。
 - [LazyColumn / LazyRow](./lazy-list.md) - 大列表渲染、键值优化与滚动状态控制。
 - [Lazy Grid 网格布局](./lazy-grid.md) - 多列卡片流、图库和网格滚动的基础能力。
 ### 导航与动画
@@ -49,6 +50,8 @@
 - [Compose 拖放交互](./drag-and-drop.md) - 组织拖拽来源、投放目标与结果反馈。
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 ## 最近更新
+- 2026-03-31：新增 [Modifier.visible() 可见性控制](./visibility-control.md) 文档，介绍 Compose 1.11 新增的 `Modifier.visible()` API，与 `alpha(0f)` 和条件渲染的区别，以及 skip drawing / 保留布局空间的使用场景。
+- 2026-03-31：收录 Compose 1.11 Beta 新动态 — `Modifier.visible()` API（隐藏元素保留布局空间且跳过绘制）、`LookaheadAnimationVisualDebugging` 动画调试组件、AndroidX `xr.compose` 1.0.0-alpha12 for Spatial Computing。
 - 2026-03-31：新增 [Compose 1.11 Breaking Changes](./compose-1-11-changes.md) 文档，详细记录 DrawLayer API 重命名（`outlineShape` → `shape`、`clipToOutline` → `clip`、`clipToBounds` 移除）、文本首行/末行 padding 移除、SwipeToReveal 改为 Slot-based API 等 Breaking Changes，并提供迁移检查清单。
 - 2026-03-31：大幅更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增 Hot Reload 1.0.0 正式版章节（内置插件、默认启用、Desktop 端支持）和 Navigation 3 非 Android 平台支持章节（iOS/Desktop/Web 统一 API、类型安全路由、跨平台深层链接）。
 - 2026-03-31：大幅更新 [Navigation Compose 3.0](./navigation.md)，新增 Navigation 3 类型安全路由 DSL（配合 Kotlin 序列化）、NavHost 跨平台支持情况表、iOS/Web 深层链接配置示例。
