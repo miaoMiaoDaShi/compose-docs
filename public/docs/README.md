@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-04-01 06:00
+> 最后更新: 2026-04-01 18:05
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -20,6 +20,7 @@
 - [Pull-to-Refresh 拉至刷新](./pull-to-refresh.md) - Material3 官方 PullToRefreshBox API，基于嵌套滚动实现下拉刷新。
 ### 布局
 - [Material 3 自适应布局](./material3.md) - 面向手机、平板和大屏的自适应设计能力。
+- [Material 3 Expressive 表情化设计](./m3-expressive.md) - I/O 2025 新组件（FABMenu、ButtonGroup、SplitButton、LoadingIndicator、Toolbars）及 M3 Motion Theming 运动主题系统。
 ### 绘制
 - [Shadow Modifiers - 阴影渲染](./shadow-modifiers.md) - Compose 1.9 引入的 dropShadow 和 innerShadow 高级阴影效果。
 - [Canvas 绘图与自定义图形](./canvas.md) - 使用 Canvas API 绘制基础图形与自定义视觉效果。
@@ -53,6 +54,7 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-01：新增 [Material 3 Expressive 表情化设计](./m3-expressive.md)，详解 I/O 2025 M3 Expressive 新组件：FABMenu（浮动操作菜单）、ButtonGroup（分组按钮，含单选/多选及动画宽度）、SplitButton（主按钮+菜单分离组合）、LoadingIndicator（统一加载指示器）、Toolbars（新增变体）以及 M3 Motion Theming 运动主题系统（Compose 1.11+），含各组件代码示例、最佳实践与避坑指南；同步大幅更新 [LazyColumn / LazyRow](./lazy-list.md)，新增 **CacheWindow** API（Compose 1.10 预取窗口）配合 Pausable Composition 分帧优化说明，以及 **`Modifier.skipToLookaheadPosition()`** 在共享元素过渡中的跳转用法。
 - 2026-04-01：更新 [Compose 1.11 Breaking Changes](./compose-1-11-changes.md)，新增 **LookaheadAnimationVisualDebugging** 动画调试组件（Compose 1.11-alpha03+）章节，介绍该可视化调试 API 如何显示预测动画的 Approach Pass、Layout Pass 边界和 Offset/DpDelta，适用于 Veil Transitions 等复杂动画的精确调优；同步新增 **Shared Context for ComposeView** 章节，说明 `setContentWithSharedContext` API 的使用场景、收益和注意事项，适用于 Fragment 多 ComposeView、ViewPager2 等场景的内存优化。
 - 2026-04-01：更新 [Kotlin 2.x & Compose 性能优化](./kotlin2.md)，新增 **Kotlin 2.3.20（2026 年 3 月）** 重要变更：`PausableComposition` 特性标志已在 Kotlin 2.3.20 中默认启用（无需 Gradle 配置），详细介绍分帧组合对 LazyColumn 预取机制的性能影响、源码级工作原理和低端设备优化收益。
 - 2026-04-01：更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增 **Common @Preview 统一预览注解**章节（Compose Multiplatform 1.10.0），介绍如何在 `commonMain` 中使用单一 `@Preview` 注解同时支持 Android / iOS / Desktop / Web 四端预览，解决历史遗留的多平台预览注解混乱问题。
