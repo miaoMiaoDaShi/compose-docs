@@ -53,6 +53,7 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-01：更新 [Compose 1.11 Breaking Changes](./compose-1-11-changes.md)，新增 **LookaheadAnimationVisualDebugging** 动画调试组件（Compose 1.11-alpha03+）章节，介绍该可视化调试 API 如何显示预测动画的 Approach Pass、Layout Pass 边界和 Offset/DpDelta，适用于 Veil Transitions 等复杂动画的精确调优；同步新增 **Shared Context for ComposeView** 章节，说明 `setContentWithSharedContext` API 的使用场景、收益和注意事项，适用于 Fragment 多 ComposeView、ViewPager2 等场景的内存优化。
 - 2026-04-01：更新 [Kotlin 2.x & Compose 性能优化](./kotlin2.md)，新增 **Kotlin 2.3.20（2026 年 3 月）** 重要变更：`PausableComposition` 特性标志已在 Kotlin 2.3.20 中默认启用（无需 Gradle 配置），详细介绍分帧组合对 LazyColumn 预取机制的性能影响、源码级工作原理和低端设备优化收益。
 - 2026-04-01：更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增 **Common @Preview 统一预览注解**章节（Compose Multiplatform 1.10.0），介绍如何在 `commonMain` 中使用单一 `@Preview` 注解同时支持 Android / iOS / Desktop / Web 四端预览，解决历史遗留的多平台预览注解混乱问题。
 - 2026-04-01：新增 [Pull-to-Refresh 拉至刷新](./pull-to-refresh.md) 文档，介绍 Material3 官方 `PullToRefreshBox` API、`PullToRefreshState` 状态管理、自定义指示器写法，以及与已废弃的 Accompanist `SwipeRefresh` 的区别对比。

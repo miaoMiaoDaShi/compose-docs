@@ -139,6 +139,98 @@ Slot API 更符合 Compose 的声明式理念，也更易于动态配置。
 
 ---
 
+## 4. LookaheadAnimationVisualDebugging 动画调试组件
+
+> 适用于：Compose 1.11-alpha03+ / `androidx.compose.animation:animation`
+
+Compose 1.11 新增了 `LookaheadAnimationVisualDebugging` 可组合函数，大幅简化动画调试过程。这是一个实验性 API，专门用于可视化 `LookaheadScope`（预测性动画框架）的内部工作原理。
+
+**功能说明：**
+
+`LookaheadAnimationVisualDebugging` 会以可视化方式展示以下信息：
+
+| 显示内容 | 说明 |
+|---------|------|
+| **Approach Pass 边界** | 显示动画"接近目标"阶段的布局范围 |
+| **Layout Pass 范围** | 显示最终布局计算的范围 |
+| **Animation Target** | 动画目标状态的位置和尺寸 |
+| **Offset/DpDelta** | 当前帧与目标帧之间的偏移量 |
+
+**使用方式：**
+
+```kotlin
+import androidx.compose.animation.core.ExperimentalLookaheadAnimationVisualDebugApi
+
+@OptIn(ExperimentalLookaheadAnimationVisualDebugApi::class)
+@Composable
+fun AnimatedListScreen() {
+    LookaheadAnimationVisualDebugging {
+        LazyColumn {
+            items(list, key = { it.id }) { item ->
+                AnimatedItem(item)
+            }
+        }
+    }
+}
+```
+
+**调试工作原理：**
+
+```
+初始状态 ──(Approach Pass)──> 预测目标位置 ──(Layout Pass)──> 最终渲染
+         ↑ 显示偏移量可视化              ↑ 显示目标边界
+```
+
+在动画开发阶段开启此组件，开发者可以直观看到 Compose 在预测动画（Lookahead）过程中如何计算中间态的尺寸和位置，从而判断是否有不必要的布局计算或视觉跳帧。
+
+**适用场景：**
+- 列表项的进入/退出动画
+- `AnimatedVisibility` + `Veil Transitions` 的精确调优
+- 任何使用 `LookaheadScope` 的复杂过渡动画
+- 性能分析：观察预测计算是否引入了额外布局开销
+
+---
+
+## 5. Shared Context for ComposeView 新标志
+
+> 适用于：Compose 1.11-alpha03+ / `androidx.compose.ui.platform`
+
+Compose 1.11 为 `ComposeView` 引入了**共享上下文（Shared Context）**标志，用于优化 View 系统与 Compose 混合使用时的内存和性能。
+
+**背景问题：**
+
+在传统用法中，每个 `ComposeView` 实例都有自己独立的 Composition 上下文。当同一个 Activity/Fragment 中存在多个 `ComposeView` 时，每个都会维护独立的 Compose 运行时实例，增加内存开销。
+
+**新标志 `setContentWithSharedContext`：**
+
+```kotlin
+// 旧写法：每个 ComposeView 独立上下文
+composeView.setContent {
+    MyComposable()
+}
+
+// 新写法：多个 ComposeView 共享同一个 Composition 上下文
+composeView.setContentWithSharedContext {
+    MyComposable()
+}
+```
+
+**典型应用场景：**
+
+| 场景 | 收益 |
+|------|------|
+| Fragment 中多个 ComposeView | 减少内存占用 |
+| ViewPager2 + ComposeView | 跨页面共享重组状态 |
+| RecyclerView item 中的 ComposeView | 减少列表内存峰值 |
+| Activity 嵌套多个 ComposeView | 统一生命周期管理 |
+
+**注意事项：**
+- 所有共享同一个上下文的 `ComposeView` 必须有相同的父 `Activity`/`Fragment` 生命周期
+- 当其中一个 `ComposeView` 所在视图树被销毁时，需注意 `ViewCompositionStrategy` 的配置
+- 该 API 为实验性，需配合 `@OptIn(ExperimentalComposeUiApi::class)` 使用
+
+---
+
 ## ⚠️ Modifier.onFirstVisible 计划弃用
 
 > 此 API 计划在 **Compose 1.11** 正式弃用，请尽快评估迁移方案。
