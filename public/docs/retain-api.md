@@ -2,15 +2,17 @@
 
 > 摘要：`retain` 是 Compose 运行时引入的新 API，用于在配置变更和临时 UI 销毁时保留状态，填补 `remember` 与 `rememberSaveable` 之间的能力空白。
 >
-> 适用版本：Jetpack Compose 运行时（开发中，AOSP 阶段）
+> 适用版本：Jetpack Compose 1.11.0-beta01+（runtime-retain 1.11.0-beta01，AOSP 已完成审查）/ Compose BOM 2026.03.01+
 >
-> 更新时间：2026-03-29
+> 更新时间：2026-04-02
 >
 > 标签：状态，retain，rememberSaveable，状态持久化
 
 ## 核心概念
 
 `retain` API 是 Compose 状态管理工具箱的新成员，设计目标是在 **临时 UI 销毁**（如配置变更、导航临时离开）和 **长期持久化** 之间取得平衡。
+
+> ✅ **稳定状态**：`retain` API 已随 Compose 1.11.0-beta01（AOSP 2026-03 完成审查）正式发布，发布于 `androidx.compose.runtime:runtime-retain` 独立 artifact，不再是实验性/内部 API。
 
 | API | 保留范围 | 需要 ViewModel | 适用场景 |
 |-----|---------|---------------|---------|
