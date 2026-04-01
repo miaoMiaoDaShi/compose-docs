@@ -2,7 +2,7 @@
 
 > 摘要：介绍 Compose Multiplatform（KMP Compose）如何用同一套 Kotlin 代码库覆盖 Android、iOS、Desktop 和 Web 四端。
 >
-> 适用版本：Compose Multiplatform 1.10.0+ / Kotlin 1.9+ / Android Studio Ladybug+
+> 适用版本：Compose Multiplatform 1.11.0-beta01+ / Kotlin 2.2+ / Android Studio Ladybug+
 >
 > 更新时间：2026-04-01
 >
@@ -164,6 +164,88 @@ fun NativeTextFieldSample() {
 **版本要求：**
 - iOS 15.0+（通过 Kotlin/Native 工具链自动处理）
 - Compose Multiplatform 1.11.0-beta01+
+
+### iOS Dialog / Popup 视图层级变更（1.11.0-beta01）
+
+> 适用于：Compose Multiplatform 1.11.0-beta01+
+
+**行为变化：**
+Compose Multiplatform 1.11.0-beta01 起，iOS 上的 `Dialog` 和 `Popup` 的容器视图改为放在 **SwiftUI Host 上方的系统转场视图（system transition view）** 中。
+
+**影响：**
+- 模态对话框和弹出层现在与 iOS 系统 UI 层级关系更一致
+- Safe Area 处理逻辑有变化，开发者需注意原本依赖视图层级计算的逻辑
+- 已有 Dialog/Popup 自定义行为的项目建议在真机上测试
+
+**适配建议：**
+- 若 Dialog/Popup 出现层级遮挡问题（如被键盘遮挡、被系统栏切割），需要重新评估 `layoutInflater` 和视图插入点
+- 涉及 Dialog 自定义动画的项目，需要检查与系统转场视图的兼容性
+
+### Web 滚动性能大幅改进（1.11.0-beta01）🌐
+
+> 适用于：Compose Multiplatform 1.11.0-beta01+ / Web (JS/Wasm)
+
+Compose Multiplatform 1.11.0 重点改进了 **Web 端滚动性能**，这是 Web 目标长期以来的痛点。
+
+**问题背景：**
+Compose Web 的滚动体验长期以来落后于原生 UI，主要原因是触控处理（touch processing）架构存在效率问题。
+
+**本次修复内容：**
+- 大量重构了 Web 端的触控事件处理逻辑
+- 滚动惯性、弹性边界（overscroll）、触控命中测试等核心路径重新优化
+- Compose Web 滚动体验现已与其他平台（iOS/Android/Desktop）基本持平
+
+**受益场景：**
+- `LazyColumn` / `LazyRow` 长列表滚动
+- 嵌套滚动场景（如 ViewPager 内嵌 LazyColumn）
+- 移动端 Web（触控滚动）
+
+**版本要求：**
+- Compose Multiplatform 1.11.0-beta01+
+
+### Shader API 重构与 Skiko 更新（1.11.0-beta01）🎨
+
+> 适用于：Compose Multiplatform 1.11.0-beta01+ / Desktop / iOS / Web（非 Android）
+
+**Shader 类型重构：**
+
+Compose Multiplatform 1.11.0-beta01 对 `Shader` 类型做了平台差异化处理：
+
+```kotlin
+// 旧写法（1.10.x）：Shader 是 Skia Shader 的 typealias
+import org.jetbrains.skia.Shader
+
+// 新写法（1.11.0+）：Shader 是 Compose 独立封装类
+import androidx.compose.ui.graphics.Shader
+import androidx.compose.ui.graphics.composeShader
+```
+
+**迁移示例：**
+
+```kotlin
+// 旧写法
+val shader = Shader.makeLinearGradient(...)
+
+// 新写法（Compose Multiplatform 1.11.0+）
+val shader = composeShader {
+    drawRect(
+        brush = Brush.linearGradient(colors)
+    )
+}
+```
+
+**Skiko 版本更新：**
+- Skia via Skiko 已更新至 **Milestone 144**
+- 包含 Skia 最新稳定版的安全修复和性能改进
+
+**Apple x86_64 支持移除：**
+- Compose Multiplatform 1.11.0-beta01 **不再支持 Apple x86_64 目标**
+- 因为 Kotlin/Native 已弃用 x86_64 Apple 目标，Compose Multiplatform 跟随移除
+- 受影响用户需迁移至 Apple Silicon (arm64) 构建设备
+
+**版本要求：**
+- Compose Multiplatform 1.11.0-beta01+
+- Kotlin 2.2+（推荐）
 
 ## Hot Reload 1.0.0 正式版 🔥
 
