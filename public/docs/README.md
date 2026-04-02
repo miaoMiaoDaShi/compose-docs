@@ -31,6 +31,7 @@
 ### 列表
 - [Visibility Tracking 可见性跟踪](./visibility-tracking.md) - Compose 1.8 引入的可见性监听 API，用于分析和懒加载。
 - [Modifier.visible() 可见性控制](./visibility-control.md) - Compose 1.11 引入的可见性控制 API，隐藏元素时保留布局空间并跳过绘制阶段。
+- [CSS Grid Layout（非惰性网格）](./css-grid-layout.md) - Compose Foundation 全新 CSS Grid 风格非惰性二维布局 API，支持行/列轨道、网格线、跨行跨列和 Gap，适用于中等规模固定网格内容（GridCells API + GridScope.gridItem）。
 - [LazyColumn / LazyRow](./lazy-list.md) - 大列表渲染、键值优化与滚动状态控制。
 - [Lazy Grid 网格布局](./lazy-grid.md) - 多列卡片流、图库和网格滚动的基础能力。
 ### 导航与动画
@@ -54,6 +55,7 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-02：新增 [CSS Grid Layout（非惰性网格）](./css-grid-layout.md)，介绍 Compose Foundation 全新 CSS Grid 风格非惰性二维布局 API（`Grid` 主函数 + `GridScope.gridItem`），涵盖行/列轨道（`GridCells.Fixed/Adaptive`）、网格线（Grid Line）、网格间隙（Gap）、跨行跨列（`rowSpan`/`columnSpan`）和 `GridIndexUnspecified` 自动放置机制；补充与 `LazyVerticalGrid` 的核心区别和最佳实践。
 - 2026-04-02：更新 [Retain API 状态保留](./retain-api.md)，标记 `retain` API 已随 **Compose 1.11.0-beta01 / BOM 2026.03.01** 正式稳定（runtime-retain artifact 完成 AOSP 审查），不再是"开发中"状态；同步更新 [性能优化指南](./performance-guide.md)，新增 **Modifier.onPlaced / onVisibilityChanged** 编译优化说明（Compose 1.10+ LazyColumn 滚动性能提升约 15%）、**Modifier.visible()** 用法示例（Compose 1.11+ 跳过绘制但保留布局空间）。
 - 2026-04-02：更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增三个 Compose Multiplatform 1.11.0-beta01 重要变更：**iOS Dialog/Popup 视图层级变更**（容器视图移至 SwiftUI Host 上方系统转场视图）、**Web 滚动性能大幅改进**（触控处理重构，滚动体验与原生平台持平）、**Shader API 重构**（从 Skia typealias 迁移至 Compose 封装类）及 Skiko M144 更新，同步记录 **Apple x86_64 目标正式移除**。
 - 2026-04-01：新增 [Material 3 Expressive 表情化设计](./m3-expressive.md)，详解 I/O 2025 M3 Expressive 新组件：FABMenu（浮动操作菜单）、ButtonGroup（分组按钮，含单选/多选及动画宽度）、SplitButton（主按钮+菜单分离组合）、LoadingIndicator（统一加载指示器）、Toolbars（新增变体）以及 M3 Motion Theming 运动主题系统（Compose 1.11+），含各组件代码示例、最佳实践与避坑指南；同步大幅更新 [LazyColumn / LazyRow](./lazy-list.md)，新增 **CacheWindow** API（Compose 1.10 预取窗口）配合 Pausable Composition 分帧优化说明，以及 **`Modifier.skipToLookaheadPosition()`** 在共享元素过渡中的跳转用法。
