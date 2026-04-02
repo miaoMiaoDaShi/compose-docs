@@ -367,6 +367,44 @@ fun MainNavHost() {
 - iOS 端的返回栈行为与 Android 略有差异，建议在目标平台实测
 - 确认 `navigation-compose` 依赖版本为 3.0+：`org.jetbrains.compose.navigation:navigation-compose:3.0.0+`
 
+## 官方模板归档事件（2026 年 3 月）⚠️
+
+> 适用于：Compose Multiplatform 项目初始化
+
+**重要变更：**
+
+JetBrains 官方维护的 `compose-multiplatform-template` GitHub 仓库已于 **2026 年 3 月正式归档（Archived）**，不再接受更新。这标志着 Compose Multiplatform 从"官方提供基础模板"转向"社区提供生产级模板"的生态过渡。
+
+**归档原因：**
+- 基础模板无法覆盖真实项目的复杂度（依赖注入、CI/CD、平台特定配置等）
+- 社区生产级模板（如 KMPShip）已经提供了更完整的起点
+- JetBrains 将资源集中在 Compose Multiplatform 核心框架本身
+
+**对项目的影响：**
+
+| 维度 | 影响 |
+|------|------|
+| 新建项目 | 不再能使用 `git clone` 官方模板，需要使用社区模板或手动初始化 |
+| 已有项目 | 不受影响，继续维护 |
+| 学习参考 | 归档仓库仍可阅读，但部分配置可能过时 |
+
+**推荐替代方案：**
+
+1. **KMPShip**（kmp.ship.app）：生产级 Compose Multiplatform 启动模板，内置 Hilt、快速发布配置和平台特定脚手架
+2. **Kotlin Multiplatform Wizard**（jetbrains.com）：官方在线项目生成器，可选 Compose UI 模块
+3. **手动初始化**：通过 Gradle 手动搭建，参考 [kotlinlang.org 官方文档](https://kotlinlang.org/docs/multiplatform-set-up.html)
+
+**从归档模板迁移到生产模板的建议检查项：**
+
+```markdown
+- [ ] 依赖注入方案（Hilt / Koin / 手动 DI）
+- [ ] iOS CocoaPods 集成配置
+- [ ] Android minSdk / targetSdk 版本
+- [ ] CI/CD 流水线（GitHub Actions / Bitrise）
+- [ ] 多平台资源文件组织（moko-resources）
+- [ ] 发布配置（Google Play / App Store）
+```
+
 ## 与 Jetpack Compose 的版本同步
 
 Compose Multiplatform 的版本与 Jetpack Compose BOM 保持同步：
