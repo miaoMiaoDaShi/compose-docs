@@ -175,6 +175,71 @@ fun StableCard(name: String, count: Int) {
 }
 ```
 
+## Stability Configuration File（Compose Compiler 1.5.5+）
+
+> 适用于：Compose Compiler 1.5.5+ / Kotlin 2.0+
+
+从 Compose Compiler 1.5.5 起，开发者可以提供一个**编译期配置文件**，在源代码没有 @Stable/@Immutable 注解的情况下，手动声明哪些类为"稳定"（Stable）。这解决了第三方库或遗留代码无法直接加注解时的性能优化问题。
+
+**背景问题：**
+- 第三方库的 data class 无法加 `@Stable` 注解
+- 旧代码库迁移到 Compose 时，批量加注解工作量大
+- Kotlin 集合（`List`、`Map`、`Set`）每次被当作不稳定处理，即使内容实际不可变
+
+**配置方式：**
+
+```kotlin
+// build.gradle.kts
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:stabilityConfigurationFile=<project_root>/config/stability-config.txt"
+        )
+    }
+}
+```
+
+**配置文件示例（`config/stability-config.txt`）：**
+
+```
+# 格式：完全限定类名（或包名通配符）+ 稳定/非稳定标记
+
+# 将整个包标记为稳定
+com.example.data.model.*
+
+# 特定类标记为稳定
+com.example.domain.MySealedClass
+com.example.ui.UiState
+
+# 显式标记为不稳定（覆盖自动推断）
+com.example.util.UnstableClass unstable
+```
+
+**包级通配符的好处：**
+- 第三方库的所有 model 类一次性声明稳定
+- 新增 model 不需要每次更新配置（除非显式标记不稳定）
+- 与 KSP 注解处理器配合使用时，无需修改源代码
+
+**与注解的区别：**
+
+| 维度 | @Stable / @Immutable 注解 | Stability Configuration File |
+|------|--------------------------|----------------------------|
+| 位置 | 源代码（类定义处） | 编译配置文件 |
+| 第三方库 | 不可用 | ✅ 可用 |
+| 迁移成本 | 高（需改源码） | 低（仅改配置） |
+| 细粒度 | 类级别 | 包/类级别 |
+| 覆盖行为 | 无 | 可显式标记 `unstable` |
+
+**验证工具：**
+- Android Studio **Stability Analyzer**（Otter 3+ 内置）：实时高亮不稳定类
+- Compose Compiler Metrics：`stability` 报告文件中查看每个类的稳定推断结果
+
+**最佳实践：**
+1. 先用 Stability Analyzer 定位真正影响性能的"不稳定传播链"
+2. 对第三方库数据类优先使用配置文件，避免 fork 或反射
+3. 用包级通配符批量处理，个别类显式标记 `unstable` 覆盖
+
 ## Compose December 2025 Release 要点
 
 2025 年 12 月的 Compose BOM 带来了多项改进：

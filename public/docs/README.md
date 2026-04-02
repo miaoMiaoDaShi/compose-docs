@@ -19,7 +19,7 @@
 - [Retain API 状态保留](./retain-api.md) - Compose 运行时新 API，填补 remember 与 rememberSaveable 之间的能力空白。
 - [Pull-to-Refresh 拉至刷新](./pull-to-refresh.md) - Material3 官方 PullToRefreshBox API，基于嵌套滚动实现下拉刷新。
 ### 布局
-- [Material 3 自适应布局](./material3.md) - 面向手机、平板和大屏的自适应设计能力。
+- [Material 3 自适应布局](./material3.md) - WindowSizeClass 分类、ListDetailPaneScaffold / ThreePaneScaffold 双栏/三栏布局与 Predictive Back 预测性返回手势完整指南。
 - [Material 3 Expressive 表情化设计](./m3-expressive.md) - I/O 2025 新组件（FABMenu、ButtonGroup、SplitButton、LoadingIndicator、Toolbars）及 M3 Motion Theming 运动主题系统。
 ### 绘制
 - [Shadow Modifiers - 阴影渲染](./shadow-modifiers.md) - Compose 1.9 引入的 dropShadow 和 innerShadow 高级阴影效果。
@@ -35,13 +35,12 @@
 - [LazyColumn / LazyRow](./lazy-list.md) - 大列表渲染、键值优化与滚动状态控制。
 - [Lazy Grid 网格布局](./lazy-grid.md) - 多列卡片流、图库和网格滚动的基础能力。
 ### 导航与动画
-- [Navigation Compose 3.0](./navigation.md) - 基础导航图、参数传递和路由组织方式。
-- [Navigation Compose 进阶技巧](./nav-advanced.md) - 类型安全路由、深层链接与导航回调设计。
+- [Navigation Compose 3.0](./navigation.md) - 基础导航图、参数传递、路由组织与 Predictive Back 手势集成（Navigation 3 + Material3 Adaptive）。
 - [Compose 动画 API 进阶](./animation.md) - 常用动画状态 API 与过渡组合方式，含 Veil Transitions（幕布过渡）详解。
 - [共用元素过渡动画](./shared-element.md) - 列表到详情页的共享元素动画能力，含条件化启用与初速度支持（Compose 1.10+）。
 ### 性能优化
 - [性能优化指南](./performance-guide.md) - 构建配置、重组控制与 Lazy 布局优化建议。
-- [Kotlin 2.x & Compose 性能优化](./kotlin2.md) - Kotlin 2.x 系列（2.0/2.2/2.3）Strong Skipping、Pausable Composition 与 Compose December 2025 性能改进详解。
+- [Kotlin 2.x & Compose 性能优化](./kotlin2.md) - Kotlin 2.x 系列（2.0/2.2/2.3）Strong Skipping、Pausable Composition、Stability Configuration File 与 Compose December 2025 性能改进详解。
 - [Modifier.Node 高性能自定义组件](./modifier-node.md) - 高性能自定义修饰符的底层机制与适用场景。
 - [Compose 1.11 Breaking Changes](./compose-1-11-changes.md) - Compose 1.11 版本 DrawLayer API 重命名（outlineShape→shape）、文本首行/末行 padding 移除、SwipeToReveal slot API 变更等 Breaking Changes 详解与迁移指南，含 Modifier.onFirstVisible 弃用通知。
 - [Compose December 2025 (1.10) Release 技术解读](./compose-1-10-highlights.md) - Compose 1.10 重大版本技术详解：滚动性能与 Views 持平、Pausable Composition 默认启用、Veil Transitions 幕布过渡动画、Shared Element 条件化启用与初速度支持、Modifier.onFirstVisible 弃用、StandardTestDispatcher 默认化及 Material 3 1.4 新增组件。
@@ -55,6 +54,8 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-02：大幅更新 [Material 3 自适应布局](./material3.md)，重写完整内容：新增 **WindowSizeClass 分类详解**（Compact/Medium/Expanded 三档）、**ListDetailPaneScaffold 完整示例**（含 PaneWidthConstraints 面板宽度约束）、**ThreePaneScaffold 三栏布局**（Material3 Adaptive 1.0+）、**Predictive Back 预测性返回手势**集成（ThreePaneScaffoldPredictiveBackHandler、ModalBottomSheet 自动支持、Navigation Compose 内置集成）、综合 **AdaptiveApp 完整代码示例**，分类标签和关联主题同步更新。
+- 2026-04-02：更新 [Kotlin 2.x & Compose 性能优化](./kotlin2.md)，新增 **Stability Configuration File** 章节（Compose Compiler 1.5.5+），介绍编译期配置文件声明类稳定性的机制、与 @Stable/@Immutable 注解的对比、包级通配符用法、Stability Analyzer 验证工具和最佳实践；位置插入于 "Compose December 2025 Release 要点" 之前；README 描述同步更新。
 - 2026-04-02：新增 [CSS Grid Layout（非惰性网格）](./css-grid-layout.md)，介绍 Compose Foundation 全新 CSS Grid 风格非惰性二维布局 API（`Grid` 主函数 + `GridScope.gridItem`），涵盖行/列轨道（`GridCells.Fixed/Adaptive`）、网格线（Grid Line）、网格间隙（Gap）、跨行跨列（`rowSpan`/`columnSpan`）和 `GridIndexUnspecified` 自动放置机制；补充与 `LazyVerticalGrid` 的核心区别和最佳实践。
 - 2026-04-02：更新 [Retain API 状态保留](./retain-api.md)，标记 `retain` API 已随 **Compose 1.11.0-beta01 / BOM 2026.03.01** 正式稳定（runtime-retain artifact 完成 AOSP 审查），不再是"开发中"状态；同步更新 [性能优化指南](./performance-guide.md)，新增 **Modifier.onPlaced / onVisibilityChanged** 编译优化说明（Compose 1.10+ LazyColumn 滚动性能提升约 15%）、**Modifier.visible()** 用法示例（Compose 1.11+ 跳过绘制但保留布局空间）。
 - 2026-04-02：更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增三个 Compose Multiplatform 1.11.0-beta01 重要变更：**iOS Dialog/Popup 视图层级变更**（容器视图移至 SwiftUI Host 上方系统转场视图）、**Web 滚动性能大幅改进**（触控处理重构，滚动体验与原生平台持平）、**Shader API 重构**（从 Skia typealias 迁移至 Compose 封装类）及 Skiko M144 更新，同步记录 **Apple x86_64 目标正式移除**。
