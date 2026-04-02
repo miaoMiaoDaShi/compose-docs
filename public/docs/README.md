@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-04-02 06:00
+> 最后更新: 2026-04-03 06:00
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -11,6 +11,7 @@
 - [remember / mutableStateOf](./state.md) - 组件内状态保存与触发重组的基础机制。
 - [布局组件 Box / Row / Column](./box-row-column.md) - 三个最常用基础布局的使用方式与对齐参数。
 - [Modifier 修饰符](./modifier.md) - 控制外观、布局与交互行为的链式修饰系统。
+- [Material Ripple 波纹效果](./material-ripple.md) - Compose Material 1.11 新增独立 ripple 库，支持非 Material 应用轻量使用波纹交互。
 ### 状态与副作用
 - [StateFlow / collectAsState](./stateflow.md) - ViewModel 状态流与 Compose 状态桥接方式。
 - [可组合项生命周期与重组](./lifecycle.md) - 理解组合、重组与销毁过程中的身份和更新规则。
@@ -54,6 +55,7 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-03：新增 [Material Ripple 波纹效果](./material-ripple.md)，介绍 Compose Material 1.11 新增独立 `material-ripple` artifact，将波纹效果从 Material 主库剥离，支持非 Material 设计体系的应用独立使用 `ripple()` API 和 `RippleConfiguration` 全局配置，包含迁移指南、最佳实践和与 Indication 的关系说明。
 - 2026-04-02：大幅更新 [Navigation Compose 进阶技巧](./nav-advanced.md)，重写完整内容：新增 **NavKey 接口机制**（编译期类型安全的核心原理、NavKey vs @Serializable 的关系、NavKeyValueParser 内部流程图）、**visibleBackStack API**（与 currentBackStackEntry 的区别、BottomBar 显示判断场景）、**跨目的地共享 ViewModel**（viewModel(parent.viewModelStoreOwner) 用法、promoteWithoutSaving）和**导航图模块化拆分**（按业务域分 NavGraph、子图独立测试）。同时更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增 **官方模板归档事件**（compose-multiplatform-template 仓库 2026 年 3 月正式归档），说明归档原因、对项目的影响和推荐替代方案（KMPShip / Kotlin Multiplatform Wizard / 手动初始化）。
 - 2026-04-02：大幅更新 [Material 3 自适应布局](./material3.md)，重写完整内容：新增 **WindowSizeClass 分类详解**（Compact/Medium/Expanded 三档）、**ListDetailPaneScaffold 完整示例**（含 PaneWidthConstraints 面板宽度约束）、**ThreePaneScaffold 三栏布局**（Material3 Adaptive 1.0+）、**Predictive Back 预测性返回手势**集成（ThreePaneScaffoldPredictiveBackHandler、ModalBottomSheet 自动支持、Navigation Compose 内置集成）、综合 **AdaptiveApp 完整代码示例**，分类标签和关联主题同步更新。
 - 2026-04-02：更新 [Kotlin 2.x & Compose 性能优化](./kotlin2.md)，新增 **Stability Configuration File** 章节（Compose Compiler 1.5.5+），介绍编译期配置文件声明类稳定性的机制、与 @Stable/@Immutable 注解的对比、包级通配符用法、Stability Analyzer 验证工具和最佳实践；位置插入于 "Compose December 2025 Release 要点" 之前；README 描述同步更新。
