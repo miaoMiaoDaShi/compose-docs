@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-04-03 06:00
+> 最后更新: 2026-04-03 12:00
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -26,6 +26,7 @@
 - [Shadow Modifiers - 阴影渲染](./shadow-modifiers.md) - Compose 1.9 引入的 dropShadow 和 innerShadow 高级阴影效果。
 - [Canvas 绘图与自定义图形](./canvas.md) - 使用 Canvas API 绘制基础图形与自定义视觉效果。
 - [Brush 与 Graphics API](./graphics-brush.md) - 渐变填充、纯色 Brush 与 GraphicsLayer 图层变换。
+- [Scrollable2D 与 Draggable2D 双向滚动](./scrollable-2d.md) - Compose 1.9 引入的双轴滚动 API，支持水平+垂直方向同时滚动，适用于地图、表格和图片查看器。
 ### 文本
 - [Autofill 原生支持](./autofill.md) - Compose 1.8 原生 autofill API，实现表单自动填充功能。
 - [富文本与 AnnotatedString](./rich-text.md) - 局部文字样式、高亮和混合排版的常见做法。
@@ -56,6 +57,8 @@
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
 - 2026-04-03：新增 [Material Ripple 波纹效果](./material-ripple.md)，介绍 Compose Material 1.11 新增独立 `material-ripple` artifact，将波纹效果从 Material 主库剥离，支持非 Material 设计体系的应用独立使用 `ripple()` API 和 `RippleConfiguration` 全局配置，包含迁移指南、最佳实践和与 Indication 的关系说明。
+- 2026-04-03：新增 [Scrollable2D 与 Draggable2D 双向滚动](./scrollable-2d.md)，详解 Compose 1.9（August 2025）引入的双轴滚动 API：`Scrollable2D`（支持 fling 惯性滑动，适合地图/图片查看器）和 `Draggable2D`（精确拖拽，适合棋盘/画布），包含与传统单轴修饰符对比、`rememberScrollable2DState` 创建方式、嵌套滚动协调和最佳实践。
+- 2026-04-03：新增 [Visibility Tracking 可见性追踪](./visibility-tracking.md)，详解 Compose 1.8/1.9 的 `onFirstVisible` 和 `onVisibilityChanged` API：与旧方案（LaunchedEffect + scroll 监听）对比、曝光埋点/视频自动播放完整示例、`minDurationMs`/`minFractionVisible` 参数详解、与 CacheWindow 的互补关系说明。
 - 2026-04-02：大幅更新 [Navigation Compose 进阶技巧](./nav-advanced.md)，重写完整内容：新增 **NavKey 接口机制**（编译期类型安全的核心原理、NavKey vs @Serializable 的关系、NavKeyValueParser 内部流程图）、**visibleBackStack API**（与 currentBackStackEntry 的区别、BottomBar 显示判断场景）、**跨目的地共享 ViewModel**（viewModel(parent.viewModelStoreOwner) 用法、promoteWithoutSaving）和**导航图模块化拆分**（按业务域分 NavGraph、子图独立测试）。同时更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增 **官方模板归档事件**（compose-multiplatform-template 仓库 2026 年 3 月正式归档），说明归档原因、对项目的影响和推荐替代方案（KMPShip / Kotlin Multiplatform Wizard / 手动初始化）。
 - 2026-04-02：大幅更新 [Material 3 自适应布局](./material3.md)，重写完整内容：新增 **WindowSizeClass 分类详解**（Compact/Medium/Expanded 三档）、**ListDetailPaneScaffold 完整示例**（含 PaneWidthConstraints 面板宽度约束）、**ThreePaneScaffold 三栏布局**（Material3 Adaptive 1.0+）、**Predictive Back 预测性返回手势**集成（ThreePaneScaffoldPredictiveBackHandler、ModalBottomSheet 自动支持、Navigation Compose 内置集成）、综合 **AdaptiveApp 完整代码示例**，分类标签和关联主题同步更新。
 - 2026-04-02：更新 [Kotlin 2.x & Compose 性能优化](./kotlin2.md)，新增 **Stability Configuration File** 章节（Compose Compiler 1.5.5+），介绍编译期配置文件声明类稳定性的机制、与 @Stable/@Immutable 注解的对比、包级通配符用法、Stability Analyzer 验证工具和最佳实践；位置插入于 "Compose December 2025 Release 要点" 之前；README 描述同步更新。
