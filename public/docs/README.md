@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-04-04 00:00
+> 最后更新: 2026-04-04 06:00
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -57,6 +57,7 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-04：本周例行维护确认 — **Compose 最新稳定版仍为 1.10.6**（Compose BOM 2026.03.01），**Beta 版为 1.11.0-beta02**（2026-03-25）。Compose 1.11 正式稳定版尚待发布；Retain API 已完成 AOSP 审查随 1.11.0-beta01 稳定。所有既有文档知识点已覆盖本次扫描的新增内容，无需额外新增或修改。
 - 2026-04-04：新增 [Navigation 3 NavDisplay 与声明式返回栈](./nav-display-n3.md)，详解 Navigation 3 引入的全新声明式导航范式：**`rememberNavBackStack`** + **`NavDisplay`** + **`entry()` DSL**。返回栈本身即 `SnapshotStateList<NavDestination>`，`backStack.add()` / `backStack.removeLastOrNull()` 替代命令式 `navController.navigate()`；Scenes API（`rememberSceneSetupNavEntryDecorator()`）原生支持 ListDetailPaneScaffold 多窗格布局；包含从 Nav2 到 Nav3 的完整迁移路径代码对照。
 - 2026-04-03：新增 [Material Ripple 波纹效果](./material-ripple.md)，介绍 Compose Material 1.11 新增独立 `material-ripple` artifact，将波纹效果从 Material 主库剥离，支持非 Material 设计体系的应用独立使用 `ripple()` API 和 `RippleConfiguration` 全局配置，包含迁移指南、最佳实践和与 Indication 的关系说明。
 - 2026-04-03：新增 [Scrollable2D 与 Draggable2D 双向滚动](./scrollable-2d.md)，详解 Compose 1.9（August 2025）引入的双轴滚动 API：`Scrollable2D`（支持 fling 惯性滑动，适合地图/图片查看器）和 `Draggable2D`（精确拖拽，适合棋盘/画布），包含与传统单轴修饰符对比、`rememberScrollable2DState` 创建方式、嵌套滚动协调和最佳实践。
