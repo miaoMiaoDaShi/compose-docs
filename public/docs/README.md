@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-04-04 06:00
+> 最后更新: 2026-04-04 12:00
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -30,6 +30,7 @@
 ### 文本
 - [Autofill 原生支持](./autofill.md) - Compose 1.8 原生 autofill API，实现表单自动填充功能。
 - [富文本与 AnnotatedString](./rich-text.md) - 局部文字样式、高亮和混合排版的常见做法。
+- [TextFieldState 与输入输出转换](./text-field-state.md) - Material 3 1.4 全新的状态化 TextField API：`TextFieldState` 替代 `value`/`onValueChange`，`InputTransformation` 拦截输入，`OutputTransformation` 改变视觉呈现。
 ### 列表
 - [Visibility Tracking 可见性跟踪](./visibility-tracking.md) - Compose 1.8 引入的可见性监听 API，用于分析和懒加载。
 - [Modifier.visible() 可见性控制](./visibility-control.md) - Compose 1.11 引入的可见性控制 API，隐藏元素时保留布局空间并跳过绘制阶段。
@@ -57,6 +58,7 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-04：本周例行维护 — 新增 [TextFieldState 与输入输出转换](./text-field-state.md)，详解 Material 3 1.4 / Compose Foundation 1.8 全新的状态化 TextField API：`TextFieldState` 对象替代 `value`/`onValueChange` 回调对，`InputTransformation` 拦截输入（如自动加单位、字符过滤），`OutputTransformation` 改变视觉呈现（如千分位格式化、密码遮蔽），ViewModel 持有状态实现关注点分离。同步更新 README 分类索引和关联主题。
 - 2026-04-04：本周例行维护确认 — **Compose 最新稳定版仍为 1.10.6**（Compose BOM 2026.03.01），**Beta 版为 1.11.0-beta02**（2026-03-25）。Compose 1.11 正式稳定版尚待发布；Retain API 已完成 AOSP 审查随 1.11.0-beta01 稳定。所有既有文档知识点已覆盖本次扫描的新增内容，无需额外新增或修改。
 - 2026-04-04：新增 [Navigation 3 NavDisplay 与声明式返回栈](./nav-display-n3.md)，详解 Navigation 3 引入的全新声明式导航范式：**`rememberNavBackStack`** + **`NavDisplay`** + **`entry()` DSL**。返回栈本身即 `SnapshotStateList<NavDestination>`，`backStack.add()` / `backStack.removeLastOrNull()` 替代命令式 `navController.navigate()`；Scenes API（`rememberSceneSetupNavEntryDecorator()`）原生支持 ListDetailPaneScaffold 多窗格布局；包含从 Nav2 到 Nav3 的完整迁移路径代码对照。
 - 2026-04-03：新增 [Material Ripple 波纹效果](./material-ripple.md)，介绍 Compose Material 1.11 新增独立 `material-ripple` artifact，将波纹效果从 Material 主库剥离，支持非 Material 设计体系的应用独立使用 `ripple()` API 和 `RippleConfiguration` 全局配置，包含迁移指南、最佳实践和与 Indication 的关系说明。
