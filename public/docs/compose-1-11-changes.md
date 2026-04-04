@@ -4,7 +4,7 @@
 >
 > 适用版本：Jetpack Compose 1.11.0-beta02+
 >
-> 更新时间：2026-03-31
+> 更新时间：2026-04-04
 >
 > 标签：Breaking Changes，DrawLayer，Text，SwipeToReveal，迁移
 
@@ -17,6 +17,7 @@
 | DrawLayer | `clipToBounds` | 已移除（由 `clip = true + RectangleShape` 替代） | 行为合并 |
 | SwipeToReveal | Data class 方式 | Slot-based API | Compose 推荐方式 |
 | Text | 首行/末行额外 padding | 移除额外 padding | 视觉布局有影响 |
+| 可见性 | `Modifier.onFirstVisible`（弃用） | `Modifier.visible()` | Compose 1.11 新增，布局空间保留 |
 
 ---
 
@@ -113,6 +114,114 @@ Slot API 更符合 Compose 的声明式理念，也更易于动态配置。
 
 ---
 
+## 4. Modifier.visible() 可见性控制（Compose 1.11 新增）
+
+> 适用于：Compose 1.11-alpha03+ / `androidx.compose.ui`
+
+Compose 1.11 新增了 `Modifier.visible()`，这是一个比 `Modifier.invisible()` 更精确的可见性控制 Modifier。与 `visibility = Visibility.GONE` 不同，`Modifier.visible(false)` 跳过绘制阶段（draw），但**保留布局空间**。
+
+### 与现有可见性方案对比
+
+| Modifier | 绘制 | 布局 | 语义 |
+|---------|------|------|------|
+| `Modifier.hidden()`（已弃用） | 跳过 | 保留 | 等同于 `Modifier.invisible()` |
+| `Modifier.invisible()` | 参与 | 保留 | 不可见但占空间 |
+| `Modifier.visible(false)` | **跳过** | **保留** | 不绘制但占空间（Compose 1.11+） |
+| `BoxVisibility` | 跳过 | 可选 | 条件化渲染（更重量级） |
+
+### 核心用法
+
+```kotlin
+// 隐藏元素：保留布局空间，但不参与绘制
+var showDebugOverlay by remember { mutableStateOf(false) }
+
+Box {
+    // 主内容
+    Text("Main Content")
+
+    // 调试覆盖层：隐藏时不绘制，但仍保留位置
+    Box(
+        modifier = Modifier
+            .size(100.dp)
+            .visible(showDebugOverlay)  // 不绘制，布局空间保留
+    ) {
+        DebugInfo()
+    }
+}
+```
+
+**与 `Modifier.drawWithContent` 的关系：**
+
+```kotlin
+// 旧写法：需要使用 drawWithContent 手动控制可见性
+Modifier.drawWithContent {
+    if (isVisible) {
+        drawContent()
+    }
+}
+
+// 新写法（Compose 1.11+）：语义更明确
+Modifier.visible(isVisible)
+```
+
+### 性能优势
+
+`Modifier.visible(false)` 的绘制跳过（skip draw phase）特性在以下场景有显著收益：
+
+- **调试覆盖层**：开发环境显示，生产环境隐藏——无需重组整个视图树
+- **权限控制 UI**：用户无权限时隐藏而非移除，避免布局跳变
+- **平板/折叠屏适配**：某些布局仅在大屏显示，隐藏小屏元素
+
+```kotlin
+// 性能对比场景：调试面板
+var showDebug by remember { mutableStateOf(false) }
+
+// ✅ visible(false)：不参与绘制，绘制阶段直接跳过
+Box(modifier = Modifier.visible(showDebug)) {
+    DebugPanel()
+}
+
+// ❌ invisible()：虽然不可见，但绘制阶段仍会执行（只是 alpha=0）
+Box(modifier = Modifier.invisible()) {
+    DebugPanel()  // 仍然执行组合和测量，仅跳过显示
+}
+```
+
+### 与 Predictive Back 动画结合
+
+`Modifier.visible()` 可与 Predictive Back 手势联动，实现手势预览效果：
+
+```kotlin
+@Composable
+fun SwipeToDismissCard(
+    item: Item,
+    onDismiss: () -> Unit
+) {
+    var progress by remember { mutableFloatStateOf(0f) }
+
+    PredictiveBackHandler(
+        onBack = onDismiss,
+        onProgress = { progress = it },
+        onCancel = { progress = 0f }
+    )
+
+    Card(
+        modifier = Modifier
+            .offset { IntOffset((-progress * 300f).roundToInt(), 0) }
+            .visible(progress < 1f)  // 手势完成前保留，完成后从布局树移除
+    ) {
+        Text("Swipe to dismiss: ${item.title}")
+    }
+}
+```
+
+**注意事项：**
+- `Modifier.visible()` 是 Compose 1.11 新增，之前版本不存在此 API
+- `visible` 参数为 `Boolean`，`true` = 正常显示，`false` = 不绘制但保留布局空间
+- 配合 `Modifier.alpha()` 可实现"隐藏但占位 + 渐变过渡"效果
+
+---
+
 ## 迁移检查清单
 
 - [ ] 搜索项目中对 `outlineShape`、`clipToOutline`、`clipToBounds` 的使用并替换
@@ -139,7 +248,7 @@ Slot API 更符合 Compose 的声明式理念，也更易于动态配置。
 
 ---
 
-## 4. LookaheadAnimationVisualDebugging 动画调试组件
+## 5. LookaheadAnimationVisualDebugging 动画调试组件
 
 > 适用于：Compose 1.11-alpha03+ / `androidx.compose.animation:animation`
 
@@ -191,7 +300,7 @@ fun AnimatedListScreen() {
 
 ---
 
-## 5. Shared Context for ComposeView 新标志
+## 6. Shared Context for ComposeView 新标志
 
 > 适用于：Compose 1.11-alpha03+ / `androidx.compose.ui.platform`
 

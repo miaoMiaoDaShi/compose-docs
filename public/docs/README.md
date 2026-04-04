@@ -40,13 +40,14 @@
 ### 导航与动画
 - [Navigation Compose 3.0](./navigation.md) - 基础导航图、参数传递、路由组织与 Predictive Back 手势集成（Navigation 3 + Material3 Adaptive）。
 - [Navigation 3 NavDisplay 与声明式返回栈](./nav-display-n3.md) - Navigation 3 新 API：`rememberNavBackStack` + `NavDisplay` + `entry()` DSL，返回栈即 `SnapshotStateList` 的声明式导航范式，Scenes API 原生多窗格布局支持，以及从 Nav2 到 Nav3 的完整迁移路径。
+- [Predictive Back Gesture 与 Compose 集成](./predictive-back.md) - Android 13+ Predictive Back 手势与 Compose 完整集成指南：PredictiveBackHandler 手动进度访问、Navigation Compose 2.8+ 内置支持、SharedElement 联动、M3 组件内置动画支持及从 onBackPressed 的迁移路径。
 - [Compose 动画 API 进阶](./animation.md) - 常用动画状态 API 与过渡组合方式，含 Veil Transitions（幕布过渡）详解。
 - [共用元素过渡动画](./shared-element.md) - 列表到详情页的共享元素动画能力，含条件化启用与初速度支持（Compose 1.10+）。
 ### 性能优化
 - [性能优化指南](./performance-guide.md) - 构建配置、重组控制与 Lazy 布局优化建议。
 - [Kotlin 2.x & Compose 性能优化](./kotlin2.md) - Kotlin 2.x 系列（2.0/2.2/2.3）Strong Skipping、Pausable Composition、Stability Configuration File 与 Compose December 2025 性能改进详解。
 - [Modifier.Node 高性能自定义组件](./modifier-node.md) - 高性能自定义修饰符的底层机制与适用场景。
-- [Compose 1.11 Breaking Changes](./compose-1-11-changes.md) - Compose 1.11 版本 DrawLayer API 重命名（outlineShape→shape）、文本首行/末行 padding 移除、SwipeToReveal slot API 变更等 Breaking Changes 详解与迁移指南，含 Modifier.onFirstVisible 弃用通知。
+- [Compose 1.11 Breaking Changes](./compose-1-11-changes.md) - Compose 1.11 版本 DrawLayer API 重命名（outlineShape→shape）、文本首行/末行 padding 移除、SwipeToReveal slot API 变更、Modifier.visible() 新增、LookaheadAnimationVisualDebugging、Shared Context for ComposeView 等完整变更详解与迁移指南，含 Modifier.onFirstVisible 弃用通知。
 - [Compose December 2025 (1.10) Release 技术解读](./compose-1-10-highlights.md) - Compose 1.10 重大版本技术详解：滚动性能与 Views 持平、Pausable Composition 默认启用、Veil Transitions 幕布过渡动画、Shared Element 条件化启用与初速度支持、Modifier.onFirstVisible 弃用、StandardTestDispatcher 默认化及 Material 3 1.4 新增组件。
 ### 平台与工程
 - [Compose Multiplatform 跨平台开发](./compose-multiplatform.md) - 用同一套 Kotlin 代码覆盖 Android / iOS / Desktop / Web 四端的跨平台开发指南。
@@ -58,6 +59,7 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-04：本周例行维护 — 新增 [Predictive Back Gesture 与 Compose 集成](./predictive-back.md)，详解 Android 13+ Predictive Back 手势与 Compose 的完整集成：**PredictiveBackHandler** 手动进度访问（非 Navigation 场景）、Navigation Compose 2.8+ 内置支持与 `popEnterTransition/popExitTransition` 联动、与 SharedBounds 共享元素动画的 Predictive Back 联动（从详情页手势返回列表页的连贯动画）、Material 3 组件内置 Predictive Back 支持（ModalBottomSheet、Dialog 等）以及从 `onBackPressed` 的完整迁移路径。同步大幅更新 [Compose 1.11 Breaking Changes](./compose-1-11-changes.md)，新增 **Modifier.visible()** 章节（Compose 1.11 新增 API，跳过绘制但保留布局空间的可见性控制，含性能优势、与 Predictive Back 动画结合示例），并重新编号后续章节（4→5→6）；README 分类索引同步新增 predictive-back.md 入口。
 - 2026-04-04：本周例行维护 — 新增 [TextFieldState 与输入输出转换](./text-field-state.md)，详解 Material 3 1.4 / Compose Foundation 1.8 全新的状态化 TextField API：`TextFieldState` 对象替代 `value`/`onValueChange` 回调对，`InputTransformation` 拦截输入（如自动加单位、字符过滤），`OutputTransformation` 改变视觉呈现（如千分位格式化、密码遮蔽），ViewModel 持有状态实现关注点分离。同步更新 README 分类索引和关联主题。
 - 2026-04-04：本周例行维护确认 — **Compose 最新稳定版仍为 1.10.6**（Compose BOM 2026.03.01），**Beta 版为 1.11.0-beta02**（2026-03-25）。Compose 1.11 正式稳定版尚待发布；Retain API 已完成 AOSP 审查随 1.11.0-beta01 稳定。所有既有文档知识点已覆盖本次扫描的新增内容，无需额外新增或修改。
 - 2026-04-04：新增 [Navigation 3 NavDisplay 与声明式返回栈](./nav-display-n3.md)，详解 Navigation 3 引入的全新声明式导航范式：**`rememberNavBackStack`** + **`NavDisplay`** + **`entry()` DSL**。返回栈本身即 `SnapshotStateList<NavDestination>`，`backStack.add()` / `backStack.removeLastOrNull()` 替代命令式 `navController.navigate()`；Scenes API（`rememberSceneSetupNavEntryDecorator()`）原生支持 ListDetailPaneScaffold 多窗格布局；包含从 Nav2 到 Nav3 的完整迁移路径代码对照。
