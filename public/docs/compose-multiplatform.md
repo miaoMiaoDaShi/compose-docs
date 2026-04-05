@@ -4,7 +4,7 @@
 >
 > 适用版本：Compose Multiplatform 1.11.0-beta01+ / Kotlin 2.2+ / Android Studio Ladybug+
 >
-> 更新时间：2026-04-01
+> 更新时间：2026-04-06
 >
 > 标签：跨平台，Kotlin Multiplatform，iOS，Desktop，Web，KMP
 
@@ -246,6 +246,294 @@ val shader = composeShader {
 **版本要求：**
 - Compose Multiplatform 1.11.0-beta01+
 - Kotlin 2.2+（推荐）
+
+## WindowInsetsRulers 窗口插入区探测（1.10.0）📐
+
+> 适用于：Compose Multiplatform 1.10.0+ / 所有平台
+
+Compose Multiplatform 1.10.0 引入了 **`WindowInsetsRulers`**，提供基于窗口插入区（Status Bar、Navigation Bar、On-Screen Keyboard）精确定位和调整 UI 元素的 API。
+
+**背景问题：**
+在多平台开发中，窗口插入区的处理一直是跨平台 UI 的痛点。不同平台的状态栏、导航栏和软键盘高度差异巨大，手动计算既繁琐又容易出错。
+
+**核心 API：**
+
+```kotlin
+import androidx.compose.foundation.layout.WindowInsetsRulers
+
+@Composable
+fun AdaptiveContent() {
+    // 获取当前窗口插入区的读取器
+    val windowInsets = WindowInsetsRulers.current
+
+    // 读取各方向插入区数值
+    val statusBarHeight = with(LocalDensity.current) {
+        windowInsets.statusBars.asPaddingValues().calculateTopPadding().toPx()
+    }
+
+    val navBarHeight = with(LocalDensity.current) {
+        windowInsets.navigationBars.asPaddingValues().calculateBottomPadding().toPx()
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                top = WindowInsetsCInsets.statusBars.asPaddingValues().calculateTopPadding()
+            )
+    ) {
+        // 根据插入区自动调整内容位置
+    }
+}
+```
+
+**典型使用场景：**
+
+| 场景 | 说明 |
+|------|------|
+| 全屏沉浸内容 | 自动避开 Status Bar，不被系统栏遮挡 |
+| 底部导航栏适配 | 根据 Navigation Bar 高度调整底部固定元素位置 |
+| 键盘弹出布局 | 键盘显示时自动调整布局，避免输入框被遮挡 |
+| 折叠屏/多窗口 | 窗口大小变化时实时响应插入区变化 |
+
+**优势：**
+- 跨平台统一 API，无需为各平台写 expect/actual
+- 与 `Modifier.statusBarsPadding()` / `Modifier.navigationBarsPadding()` 互补（后者是修饰符层面直接应用，此 API 是数值读取层面）
+- 支持 `PaddingValues` 和原始 `Dp` 两种取值方式
+
+**版本要求：**
+- Compose Multiplatform 1.10.0+
+
+## PredictiveBackHandler 跨平台预测性返回（1.10.0）🔮
+
+> 适用于：Compose Multiplatform 1.10.0+ / iOS + Desktop（非 Android）
+
+Compose Multiplatform 1.10.0 引入了 **`PredictiveBackHandler`** API，将 Android 原生的 Predictive Back（预测性返回）手势带到非 Android 平台。这是跨平台手势交互的重要里程碑。
+
+**背景：**
+Android 13+ 的 Predictive Back 允许用户在执行返回操作前预览目标页面，提供更直观的导航体验。在此之前，iOS 和 Desktop 平台无法使用此功能。
+
+**核心 API：**
+
+```kotlin
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.animation.predictiveBack
+
+@Composable
+fun BackGestureSample(
+    onNavigateBack: () -> Unit
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // PredictiveBackHandler 拦截返回手势
+        PredictiveBackHandler(
+            onBack = {
+                // 手势完成时的回调
+                onNavigateBack()
+            },
+            onProgress = { progress: Float ->
+                // 手势进行中的进度回调（0.0 到 1.0）
+                // 可用于驱动自定义动画
+            }
+        ) {
+            // 手势捕获区域（通常是整个屏幕或边缘区域）
+            BackGestureArea {
+                // 这里可以放置背景预览内容
+                // 在手势过程中实时显示返回目标的预览
+            }
+        }
+    }
+}
+```
+
+**与 Android 的差异：**
+
+| 维度 | Android（Jetpack Compose） | Compose Multiplatform |
+|------|---------------------------|----------------------|
+| 触发方式 | 系统级返回手势 | `PredictiveBackHandler` 手动集成 |
+| 进度回调 | `PredictiveBackHandler` 同名 API | 相同 API |
+| 系统预览 | 系统自动渲染 | 需要在 `BackGestureArea` 中手动实现预览 |
+| Navigation 集成 | Navigation Compose 2.8+ 内置 | 需要手动处理返回栈 |
+
+**自定义预览动画示例：**
+
+```kotlin
+PredictiveBackHandler(
+    onBack = { onNavigateBack() },
+    onProgress = { progress ->
+        // progress 0.0~1.0 驱动过渡动画
+        val scale = 1f - (progress * 0.1f)
+        val alpha = 1f - progress
+        previousScreenScale = scale
+        previousScreenAlpha = alpha
+    }
+) {
+    // 返回目标的预览内容
+    // 通常是上一个页面的快照或模糊背景
+    PreviousScreenPreview(
+        modifier = Modifier
+            .scale(previousScreenScale)
+            .alpha(previousScreenAlpha)
+    )
+}
+```
+
+**注意事项：**
+- iOS 端需要 iOS 13.0+；Desktop 端支持 Windows/macOS/Linux
+- `PredictiveBackHandler` 在 Android 平台存在但无效果（Android 使用系统级 Predictive Back）
+- 与 Navigation Compose 配合使用时，需要手动同步返回栈状态
+
+**版本要求：**
+- Compose Multiplatform 1.10.0+
+
+## 原生互操作视图自动调整大小（1.10.0）📱💻
+
+> 适用于：Compose Multiplatform 1.10.0+ / iOS + Desktop
+
+Compose Multiplatform 1.10.0 为**原生互操作视图（Native Interop Views）**添加了**自动调整大小**支持，解决了混编项目中 UI 布局的长期痛点。
+
+**问题背景：**
+
+在 KMP 项目中，经常需要将原生 UIView（iOS）或 Native Panel（Desktop）嵌入到 Compose 界面中。传统方案需要开发者手动计算和同步原生视图的大小与 Compose 布局，代码繁琐且容易出现不同步的 Bug。
+
+**新方案 — 自动调整大小：**
+
+```kotlin
+import androidx.compose.ui.awt.awtComposeEditor
+
+@Composable
+fun InteropViewSample() {
+    // Compose 自动管理原生视图的布局
+    // 无需手动同步 size 或 position
+    AndroidView(
+        factory = { context ->
+            MyNativeView(context).apply {
+                // Compose 自动调用此回调通知大小变化
+                onSizeChanged = { width, height ->
+                    // 以前需要在这里手动同步给 Compose
+                    // 现在由框架自动处理
+                }
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            // 高度由原生视图内容决定
+    )
+}
+```
+
+**Desktop（Windows/macOS/Linux）互操作示例：**
+
+```kotlin
+import androidx.compose.ui.awt.invoke
+import androidx.compose.ui.awt.ComposePanel
+
+@Composable
+fun DesktopInteropSample() {
+    // Swing Panel 自动适应 Compose 布局约束
+    ComposePanel().apply {
+        setContent {
+            // Compose 内容嵌入 Swing Panel
+        }
+    }
+}
+```
+
+**iOS UIKit 互操作示例：**
+
+```kotlin
+import androidx.compose.ui.interop.uiKitView
+
+@Composable
+fun IOSInteropSample() {
+    uiKitView(
+        factory = {
+            // 原生 UIKit 视图
+            MyCustomUIView()
+        },
+        modifier = Modifier
+            .height(200.dp)
+            .fillMaxWidth()
+        // 宽度自动适应容器，无需手动管理
+    )
+}
+```
+
+**迁移建议：**
+
+如果项目中有手动同步原生视图大小的代码，可以移除这些手动逻辑：
+
+```kotlin
+// 可以删除的旧代码（Compose Multiplatform 1.10.0+ 不再需要）
+var composeSize by remember { mutableStateOf(IntSize.Zero) }
+
+Box(
+    modifier = Modifier
+        .onSizeChanged { size -> composeSize = size }
+) {
+    // 手动同步逻辑 → 可以删除
+}
+
+// 新方案：框架自动处理
+Box {
+    NativeInteropView()
+}
+```
+
+**版本要求：**
+- Compose Multiplatform 1.10.0+
+- iOS 15.0+ / Desktop（所有主流平台）
+
+## Compose Multiplatform 1.10.0 附加变更 ⚙️
+
+> 适用于：Compose Multiplatform 1.10.0-beta01+
+
+### 依赖别名弃用
+
+Compose Multiplatform Gradle Plugin 提供的依赖别名（如 `compose.ui`、`compose.foundation` 等）在 1.10.0-beta01 起**正式弃用（Deprecated）**。
+
+**弃用原因：**
+这些别名与 Android Jetpack Compose 的依赖名称冲突，容易造成混淆，且与 Kotlin Multiplatform 的标准模块命名规范不一致。
+
+**受影响别名：**
+
+| 旧别名（弃用） | 推荐替代 |
+|---------------|---------|
+| `compose.ui` | `androidx.compose.ui` |
+| `compose.foundation` | `androidx.compose.foundation` |
+| `compose.material` | `androidx.compose.material` |
+| `compose.material3` | `androidx.compose.material3` |
+| `compose.animation` | `androidx.compose.animation` |
+
+**迁移方式：**
+
+```kotlin
+// build.gradle.kts（shared 模块）
+commonMain {
+    dependencies {
+        // ❌ 旧写法（弃用）
+        implementation(compose.ui)
+        implementation(compose.foundation)
+
+        // ✅ 新写法
+        implementation("androidx.compose.ui:ui")
+        implementation("androidx.compose.foundation:foundation")
+        implementation("androidx.compose.material3:material3")
+    }
+}
+```
+
+**建议：**
+- 新项目直接使用 `androidx.compose.*` 完整依赖
+- 已有项目逐步替换，避免未来版本冲突
+
+### AGP 9.0.0 支持
+
+Compose Multiplatform 1.10.0 正式支持 **Android Gradle Plugin（AGP）9.0.0**。
+
+**升级注意：**
+- AGP 9.0.0 要求 Gradle 8.6+
+- 部分旧版 Gradle 配置（如 `kotlin.daemon.jvm.options`）需要调整
+- 建议通过 Android Studio Ladybug+ 新建项目验证 AGP 9.0.0 兼容性
 
 ## Hot Reload 1.0.0 正式版 🔥
 
