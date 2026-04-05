@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-04-05 06:00
+> 最后更新: 2026-04-05 12:00
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -59,6 +59,7 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
+- 2026-04-05 12:00：例行午间扫描 — 确认 **Compose 最新稳定 BOM 仍为 2026.03.01（库版本 1.10.4）**，**Beta 为 1.11.0-beta02**（2026-03-25）；Compose 1.11 正式版尚待发布；本次扫描新增关注点：Google I/O 2025 AI Studio Narwhal Feature Drop 对 Compose Preview 的深度集成（Breakpoint annotations、Prompt 生成 UI、Transform UI）、Compose Multiplatform iOS 1.8.0 稳定版（2025 年 5 月）生产就绪状态验证——均已在现有文档中覆盖，无需新增或修改。
 - 2026-04-05：例行月度扫描 — 确认 **Compose 最新稳定 BOM 仍为 2026.03.01**（库版本 1.10.4），**4 月无新稳定版本发布**；Compose 1.11 正式版尚待发布；所有本次扫描涉及的新特性（Retain API 稳定化、Strong Skipping Mode、CacheWindow + skipToLookaheadPosition、prepareTransitionWithInitialVelocity 等）均已在现有文档中覆盖，无需新增或修改。
 - 2026-04-05：更新 [共用元素过渡动画](./shared-element.md)，新增 **prepareTransitionWithInitialVelocity** 章节（Compose 1.10 December 2025 新 API）。详解该 API 与 `SharedBounds.initialVelocity` 的区别（局部 vs 全局协调）、`SharedTransitionScope` 内的手势速度协调用法、完整手势驱动列表→详情过渡代码示例，以及与 Predictive Back 配合的最佳实践。同步更新文档标签和更新时间。
 - 2026-04-04：本周例行维护 — 新增 [Predictive Back Gesture 与 Compose 集成](./predictive-back.md)，详解 Android 13+ Predictive Back 手势与 Compose 的完整集成：**PredictiveBackHandler** 手动进度访问（非 Navigation 场景）、Navigation Compose 2.8+ 内置支持与 `popEnterTransition/popExitTransition` 联动、与 SharedBounds 共享元素动画的 Predictive Back 联动（从详情页手势返回列表页的连贯动画）、Material 3 组件内置 Predictive Back 支持（ModalBottomSheet、Dialog 等）以及从 `onBackPressed` 的完整迁移路径。同步大幅更新 [Compose 1.11 Breaking Changes](./compose-1-11-changes.md)，新增 **Modifier.visible()** 章节（Compose 1.11 新增 API，跳过绘制但保留布局空间的可见性控制，含性能优势、与 Predictive Back 动画结合示例），并重新编号后续章节（4→5→6）；README 分类索引同步新增 predictive-back.md 入口。
