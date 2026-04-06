@@ -4,7 +4,7 @@
 >
 > 适用版本：Compose BOM 2025.12.00+ / Kotlin 2.3+（部分特性）
 >
-> 更新时间：2026-04-01
+> 更新时间：2026-04-07
 >
 > 标签：性能，动画，SharedElement，测试，PausableComposition，Material3
 

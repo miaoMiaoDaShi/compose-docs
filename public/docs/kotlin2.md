@@ -4,7 +4,7 @@
 >
 > 适用版本：Kotlin 2.0+ / Compose Compiler 1.5.4+
 >
-> 更新时间：2026-04-01
+> 更新时间：2026-04-07
 >
 > 标签：性能，Kotlin2，StrongSkipping，PausableComposition，ComposeCompiler，Kotlin2.3.20
 

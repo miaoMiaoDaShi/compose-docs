@@ -2,7 +2,7 @@
 
 > 摘要：介绍 Compose Multiplatform（KMP Compose）如何用同一套 Kotlin 代码库覆盖 Android、iOS、Desktop 和 Web 四端。
 >
-> 适用版本：Compose Multiplatform 1.11.0-beta01+ / Kotlin 2.2+ / Android Studio Ladybug+
+> 适用版本：Compose Multiplatform 1.10.3+ / Compose Multiplatform 1.11.0-beta02+ / Kotlin 2.2+ / Android Studio Ladybug+
 >
 > 更新时间：2026-04-06
 >
