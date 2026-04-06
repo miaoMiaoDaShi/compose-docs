@@ -304,7 +304,11 @@ fun AdaptiveContent() {
 **版本要求：**
 - Compose Multiplatform 1.10.0+
 
-## PredictiveBackHandler 跨平台预测性返回（1.10.0）🔮
+## PredictiveBackHandler 跨平台预测性返回（1.10.0，已弃用）⚠️
+
+> ⚠️ **PredictiveBackHandler 已弃用（Compose Multiplatform 1.10.0+）**
+>
+> `PredictiveBackHandler` API 在 Compose Multiplatform 1.10.0 中**已被弃用**。底层事件系统已迁移至 `NavigationEvent`，推荐迁移到 **`NavigationBackHandler`** + **`rememberNavigationEventState`** API。详见下方「NavigationEvent 迁移指南」章节。
 
 > 适用于：Compose Multiplatform 1.10.0+ / iOS + Desktop（非 Android）
 
@@ -384,6 +388,133 @@ PredictiveBackHandler(
 
 **版本要求：**
 - Compose Multiplatform 1.10.0+
+
+## NavigationEvent / NavigationBackHandler — PredictiveBackHandler 替代 API 🔄
+
+> ⚠️ **PredictiveBackHandler 弃用后的推荐替代**
+>
+> 随着底层事件系统迁移至 `NavigationEvent`，Compose Multiplatform 推荐使用新的 **`NavigationBackHandler`** + **`rememberNavigationEventState`** API 组合来处理预测性返回手势。旧 API `PredictiveBackHandler` 虽然仍可用，但已被标记弃用，建议尽快迁移。
+
+**迁移理由：**
+- `PredictiveBackHandler` 底层调用 `NavigationEvent`，新 API 直接使用更现代的抽象
+- `NavigationBackHandler` 与 AndroidX Navigation 生态更好对齐（Android 端同样使用 `NavigationEvent`）
+- `rememberNavigationEventState` 提供统一的进度访问方式，跨平台一致性更好
+
+**核心 API：**
+
+```kotlin
+import androidx.compose.navigation.compose.LocalOwnersProvider
+import androidx.compose.navigation.compose.NavigationBackHandler
+import androidx.compose.navigation.compose.rememberNavigationEventState
+import androidx.compose.navigation.compose.NavigationEventInfo
+import androidx.compose.navigation.compose.NavigationEventTransitionState
+
+@Composable
+fun ScreenWithNavigationEvent(
+    onNavigateBack: () -> Unit
+) {
+    // 创建 NavigationEvent 状态（与 AndroidX Navigation 共享同一类型）
+    val navState = rememberNavigationEventState(NavigationEventInfo.None)
+
+    // 注册 NavigationBackHandler 替代 PredictiveBackHandler
+    NavigationBackHandler(
+        state = navState,
+        isBackEnabled = true,
+        onBackCancelled = {
+            // 手势取消：重置预览状态
+            offsetX = 0f
+        },
+        onBackCompleted = {
+            // 手势完成：执行真正的返回操作
+            onNavigateBack()
+        }
+    )
+
+    // 监听手势进度，驱动预览动画
+    LaunchedEffect(navState.transitionState) {
+        val transitionState = navState.transitionState
+        if (transitionState is NavigationEventTransitionState.InProgress) {
+            val progress = transitionState.latestEvent.progress
+            // progress 0.0~1.0 驱动动画
+            offsetX = -progress * 300f
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .offset { IntOffset(offsetX.roundToInt(), 0) }
+            .fillMaxSize()
+    ) {
+        // 屏幕内容
+    }
+}
+```
+
+**与 PredictiveBackHandler 的代码对比：**
+
+```kotlin
+// ❌ 旧 API（已弃用）
+PredictiveBackHandler(
+    onBack = { onNavigateBack() },
+    onProgress = { progress: Float ->
+        offsetX = -progress * 300f
+    },
+    onCancel = {
+        offsetX = 0f
+    }
+)
+
+// ✅ 新 API（推荐）
+val navState = rememberNavigationEventState(NavigationEventInfo.None)
+
+NavigationBackHandler(
+    state = navState,
+    isBackEnabled = true,
+    onBackCancelled = { offsetX = 0f },
+    onBackCompleted = { onNavigateBack() }
+)
+
+LaunchedEffect(navState.transitionState) {
+    val ts = navState.transitionState
+    if (ts is NavigationEventTransitionState.InProgress) {
+        offsetX = -ts.latestEvent.progress * 300f
+    }
+}
+```
+
+**NavigationEvent 类型体系：**
+
+| 类型 | 用途 |
+|------|------|
+| `NavigationEventInfo` | 创建状态的配置对象 |
+| `NavigationEvent` | 底层事件，包含 `progress: Float` 和 `swipeEdge` |
+| `NavigationEventTransitionState` | 手势状态枚举：`InProgress`、`Completed`、`Cancelled` |
+| `NavigationBackHandler` | 手势拦截与完成回调注册 |
+| `rememberNavigationEventState` | 状态创建 |
+
+**获取手势方向（swipeEdge）：**
+
+```kotlin
+LaunchedEffect(navState.transitionState) {
+    val ts = navState.transitionState
+    if (ts is NavigationEventTransitionState.InProgress) {
+        val edge = ts.latestEvent.swipeEdge
+        // NavigationEvent.EDGE_LEFT 或 EDGE_RIGHT
+        isReverse = (edge == NavigationEvent.EDGE_RIGHT)
+    }
+}
+```
+
+**版本要求：**
+- Compose Multiplatform 1.10.0+（与 PredictiveBackHandler 同一版本引入，但为更新的推荐 API）
+- Android 端需 `androidx.activity:activity-compose` 对应版本
+
+**迁移检查清单：**
+- [ ] 将 `PredictiveBackHandler` 替换为 `NavigationBackHandler` + `rememberNavigationEventState`
+- [ ] `onProgress` 回调 → `LaunchedEffect` 监听 `transitionState`
+- [ ] `onBack` → `onBackCompleted`
+- [ ] `onCancel` → `onBackCancelled`
+- [ ] 确认 iOS 端 `Info.plist` 已启用 `UIResponderSupportsPredictiveBackGesture`
 
 ## 原生互操作视图自动调整大小（1.10.0）📱💻
 
