@@ -1,0 +1,413 @@
+{
+  "generatedAt": "2026-04-07T09:28:03.124Z",
+  "lastUpdated": "2026-04-07 06:00",
+  "totalDocs": 46,
+  "categories": [
+    {
+      "name": "基础入门",
+      "count": 5
+    },
+    {
+      "name": "状态与副作用",
+      "count": 6
+    },
+    {
+      "name": "布局",
+      "count": 2
+    },
+    {
+      "name": "绘制",
+      "count": 4
+    },
+    {
+      "name": "文本",
+      "count": 4
+    },
+    {
+      "name": "列表",
+      "count": 6
+    },
+    {
+      "name": "导航与动画",
+      "count": 6
+    },
+    {
+      "name": "性能优化",
+      "count": 5
+    },
+    {
+      "name": "平台与工程",
+      "count": 8
+    }
+  ],
+  "docs": [
+    {
+      "slug": "composable",
+      "title": "@Composable 函数",
+      "path": "docs/composable.md",
+      "summary": "Compose 声明式 UI 的入口与最小构建单元。",
+      "category": "基础入门",
+      "order": 1
+    },
+    {
+      "slug": "state",
+      "title": "remember / mutableStateOf",
+      "path": "docs/state.md",
+      "summary": "组件内状态保存与触发重组的基础机制。",
+      "category": "基础入门",
+      "order": 2
+    },
+    {
+      "slug": "box-row-column",
+      "title": "布局组件 Box / Row / Column",
+      "path": "docs/box-row-column.md",
+      "summary": "三个最常用基础布局的使用方式与对齐参数。",
+      "category": "基础入门",
+      "order": 3
+    },
+    {
+      "slug": "modifier",
+      "title": "Modifier 修饰符",
+      "path": "docs/modifier.md",
+      "summary": "控制外观、布局与交互行为的链式修饰系统。",
+      "category": "基础入门",
+      "order": 4
+    },
+    {
+      "slug": "material-ripple",
+      "title": "Material Ripple 波纹效果",
+      "path": "docs/material-ripple.md",
+      "summary": "Compose Material 1.11 新增独立 ripple 库，支持非 Material 应用轻量使用波纹交互。",
+      "category": "基础入门",
+      "order": 5
+    },
+    {
+      "slug": "stateflow",
+      "title": "StateFlow / collectAsState",
+      "path": "docs/stateflow.md",
+      "summary": "ViewModel 状态流与 Compose 状态桥接方式。",
+      "category": "状态与副作用",
+      "order": 6
+    },
+    {
+      "slug": "lifecycle",
+      "title": "可组合项生命周期与重组",
+      "path": "docs/lifecycle.md",
+      "summary": "理解组合、重组与销毁过程中的身份和更新规则。",
+      "category": "状态与副作用",
+      "order": 7
+    },
+    {
+      "slug": "coroutine-scope",
+      "title": "rememberCoroutineScope & LaunchedEffect",
+      "path": "docs/coroutine-scope.md",
+      "summary": "在 Compose 中安全启动协程与处理副作用。",
+      "category": "状态与副作用",
+      "order": 8
+    },
+    {
+      "slug": "derived-state",
+      "title": "derivedStateOf 性能优化",
+      "path": "docs/derived-state.md",
+      "summary": "用派生状态减少不必要的 UI 更新。",
+      "category": "状态与副作用",
+      "order": 9
+    },
+    {
+      "slug": "retain-api",
+      "title": "Retain API 状态保留",
+      "path": "docs/retain-api.md",
+      "summary": "Compose 运行时新 API，填补 remember 与 rememberSaveable 之间的能力空白。",
+      "category": "状态与副作用",
+      "order": 10
+    },
+    {
+      "slug": "pull-to-refresh",
+      "title": "Pull-to-Refresh 拉至刷新",
+      "path": "docs/pull-to-refresh.md",
+      "summary": "Material3 官方 PullToRefreshBox API，基于嵌套滚动实现下拉刷新。",
+      "category": "状态与副作用",
+      "order": 11
+    },
+    {
+      "slug": "material3",
+      "title": "Material 3 自适应布局",
+      "path": "docs/material3.md",
+      "summary": "WindowSizeClass 分类、ListDetailPaneScaffold / ThreePaneScaffold 双栏/三栏布局与 Predictive Back 预测性返回手势完整指南。",
+      "category": "布局",
+      "order": 12
+    },
+    {
+      "slug": "m3-expressive",
+      "title": "Material 3 Expressive 表情化设计",
+      "path": "docs/m3-expressive.md",
+      "summary": "I/O 2025 新组件（FABMenu、ButtonGroup、SplitButton、LoadingIndicator、Toolbars）及 M3 Motion Theming 运动主题系统。",
+      "category": "布局",
+      "order": 13
+    },
+    {
+      "slug": "shadow-modifiers",
+      "title": "Shadow Modifiers - 阴影渲染",
+      "path": "docs/shadow-modifiers.md",
+      "summary": "Compose 1.9 引入的 dropShadow 和 innerShadow 高级阴影效果。",
+      "category": "绘制",
+      "order": 14
+    },
+    {
+      "slug": "canvas",
+      "title": "Canvas 绘图与自定义图形",
+      "path": "docs/canvas.md",
+      "summary": "使用 Canvas API 绘制基础图形与自定义视觉效果。",
+      "category": "绘制",
+      "order": 15
+    },
+    {
+      "slug": "graphics-brush",
+      "title": "Brush 与 Graphics API",
+      "path": "docs/graphics-brush.md",
+      "summary": "渐变填充、纯色 Brush 与 GraphicsLayer 图层变换。",
+      "category": "绘制",
+      "order": 16
+    },
+    {
+      "slug": "scrollable-2d",
+      "title": "Scrollable2D 与 Draggable2D 双向滚动",
+      "path": "docs/scrollable-2d.md",
+      "summary": "Compose 1.9 引入的双轴滚动 API，支持水平+垂直方向同时滚动，适用于地图、表格和图片查看器。",
+      "category": "绘制",
+      "order": 17
+    },
+    {
+      "slug": "autofill",
+      "title": "Autofill 原生支持",
+      "path": "docs/autofill.md",
+      "summary": "Compose 1.8 原生 autofill API，实现表单自动填充功能。",
+      "category": "文本",
+      "order": 18
+    },
+    {
+      "slug": "rich-text",
+      "title": "富文本与 AnnotatedString",
+      "path": "docs/rich-text.md",
+      "summary": "局部文字样式、高亮和混合排版的常见做法。",
+      "category": "文本",
+      "order": 19
+    },
+    {
+      "slug": "text-field-state",
+      "title": "TextFieldState 与输入输出转换",
+      "path": "docs/text-field-state.md",
+      "summary": "Material 3 1.4 全新的状态化 TextField API：`TextFieldState` 替代 `value`/`onValueChange`，`InputTransformation` 拦截输入，`OutputTransformation` 改变视觉呈现。",
+      "category": "文本",
+      "order": 20
+    },
+    {
+      "slug": "text-context-menu",
+      "title": "Text Context Menu 自定义",
+      "path": "docs/text-context-menu.md",
+      "summary": "Compose 1.9 新增 `appendTextContextMenuComponents()` / `filterTextContextMenuComponents()`，向文本选择上下文菜单追加或移除菜单项，实现增强剪贴板、翻译、搜索等自定义功能。",
+      "category": "文本",
+      "order": 21
+    },
+    {
+      "slug": "visibility-tracking",
+      "title": "Visibility Tracking 可见性跟踪",
+      "path": "docs/visibility-tracking.md",
+      "summary": "Compose 1.8 引入的可见性监听 API，用于分析和懒加载。",
+      "category": "列表",
+      "order": 22
+    },
+    {
+      "slug": "visibility-control",
+      "title": "Modifier.visible() 可见性控制",
+      "path": "docs/visibility-control.md",
+      "summary": "Compose 1.11 引入的可见性控制 API，隐藏元素时保留布局空间并跳过绘制阶段。",
+      "category": "列表",
+      "order": 23
+    },
+    {
+      "slug": "scroll-indicator",
+      "title": "Scroll Indicator 原生滚动指示器",
+      "path": "docs/scroll-indicator.md",
+      "summary": "Compose 1.11 Foundation 新增原生 `Modifier.scrollIndicator` / `ScrollIndicatorState` API，替代 Accompanist 等第三方滚动条方案，支持标准化的滚动指示器自定义（LazyColumn / verticalScroll 等通用）。",
+      "category": "列表",
+      "order": 24
+    },
+    {
+      "slug": "css-grid-layout",
+      "title": "CSS Grid Layout（非惰性网格）",
+      "path": "docs/css-grid-layout.md",
+      "summary": "Compose Foundation 全新 CSS Grid 风格非惰性二维布局 API，支持行/列轨道、网格线、跨行跨列和 Gap，适用于中等规模固定网格内容（GridCells API + GridScope.gridItem）。",
+      "category": "列表",
+      "order": 25
+    },
+    {
+      "slug": "lazy-list",
+      "title": "LazyColumn / LazyRow",
+      "path": "docs/lazy-list.md",
+      "summary": "大列表渲染、键值优化与滚动状态控制。",
+      "category": "列表",
+      "order": 26
+    },
+    {
+      "slug": "lazy-grid",
+      "title": "Lazy Grid 网格布局",
+      "path": "docs/lazy-grid.md",
+      "summary": "多列卡片流、图库和网格滚动的基础能力。",
+      "category": "列表",
+      "order": 27
+    },
+    {
+      "slug": "navigation",
+      "title": "Navigation Compose 3.0",
+      "path": "docs/navigation.md",
+      "summary": "基础导航图、参数传递、路由组织与 Predictive Back 手势集成（Navigation 3 + Material3 Adaptive）。",
+      "category": "导航与动画",
+      "order": 28
+    },
+    {
+      "slug": "nav-display-n3",
+      "title": "Navigation 3 NavDisplay 与声明式返回栈",
+      "path": "docs/nav-display-n3.md",
+      "summary": "Navigation 3 新 API：`rememberNavBackStack` + `NavDisplay` + `entry()` DSL，返回栈即 `SnapshotStateList` 的声明式导航范式，Scenes API 原生多窗格布局支持，以及从 Nav2 到 Nav3 的完整迁移路径。",
+      "category": "导航与动画",
+      "order": 29
+    },
+    {
+      "slug": "predictive-back",
+      "title": "Predictive Back Gesture 与 Compose 集成",
+      "path": "docs/predictive-back.md",
+      "summary": "Android 13+ Predictive Back 手势与 Compose 完整集成指南：PredictiveBackHandler 手动进度访问、Navigation Compose 2.8+ 内置支持、SharedElement 联动、M3 组件内置动画支持及从 onBackPressed 的迁移路径。",
+      "category": "导航与动画",
+      "order": 30
+    },
+    {
+      "slug": "animation",
+      "title": "Compose 动画 API 进阶",
+      "path": "docs/animation.md",
+      "summary": "常用动画状态 API 与过渡组合方式，含 Veil Transitions（幕布过渡）详解。",
+      "category": "导航与动画",
+      "order": 31
+    },
+    {
+      "slug": "lookahead-animation-debugging",
+      "title": "Lookahead 动画可视化调试",
+      "path": "docs/lookahead-animation-debugging.md",
+      "summary": "Compose 1.11 新增 `LookaheadAnimationVisualDebugging` 和 `CustomizedLookaheadAnimationVisualDebugging` 调试 composable，实时显示预测动画的位置、进度和速度。",
+      "category": "导航与动画",
+      "order": 32
+    },
+    {
+      "slug": "shared-element",
+      "title": "共用元素过渡动画",
+      "path": "docs/shared-element.md",
+      "summary": "列表到详情页的共享元素动画能力，含条件化启用与初速度支持（Compose 1.10+）。",
+      "category": "导航与动画",
+      "order": 33
+    },
+    {
+      "slug": "performance-guide",
+      "title": "性能优化指南",
+      "path": "docs/performance-guide.md",
+      "summary": "构建配置、重组控制与 Lazy 布局优化建议。",
+      "category": "性能优化",
+      "order": 34
+    },
+    {
+      "slug": "kotlin2",
+      "title": "Kotlin 2.x & Compose 性能优化",
+      "path": "docs/kotlin2.md",
+      "summary": "Kotlin 2.x 系列（2.0/2.2/2.3）Strong Skipping、Pausable Composition、Stability Configuration File 与 Compose December 2025 性能改进详解。",
+      "category": "性能优化",
+      "order": 35
+    },
+    {
+      "slug": "modifier-node",
+      "title": "Modifier.Node 高性能自定义组件",
+      "path": "docs/modifier-node.md",
+      "summary": "高性能自定义修饰符的底层机制与适用场景。",
+      "category": "性能优化",
+      "order": 36
+    },
+    {
+      "slug": "compose-1-11-changes",
+      "title": "Compose 1.11 Breaking Changes",
+      "path": "docs/compose-1-11-changes.md",
+      "summary": "Compose 1.11 版本 DrawLayer API 重命名（outlineShape→shape）、文本首行/末行 padding 移除、SwipeToReveal slot API 变更、Modifier.visible() 新增、LookaheadAnimationVisualDebugging、Shared Context for ComposeView 等完整变更详解与迁移指南，含 Modifier.onFirstVisible 弃用通知。",
+      "category": "性能优化",
+      "order": 37
+    },
+    {
+      "slug": "compose-1-10-highlights",
+      "title": "Compose December 2025 (1.10) Release 技术解读",
+      "path": "docs/compose-1-10-highlights.md",
+      "summary": "Compose 1.10 重大版本技术详解：滚动性能与 Views 持平、Pausable Composition 默认启用、Veil Transitions 幕布过渡动画、Shared Element 条件化启用与初速度支持、Modifier.onFirstVisible 弃用、StandardTestDispatcher 默认化及 Material 3 1.4 新增组件。",
+      "category": "性能优化",
+      "order": 38
+    },
+    {
+      "slug": "compose-multiplatform",
+      "title": "Compose Multiplatform 跨平台开发",
+      "path": "docs/compose-multiplatform.md",
+      "summary": "用同一套 Kotlin 代码覆盖 Android / iOS / Desktop / Web 四端的跨平台开发指南。",
+      "category": "平台与工程",
+      "order": 39
+    },
+    {
+      "slug": "remote-compose",
+      "title": "RemoteCompose 服务器驱动 UI",
+      "path": "docs/remote-compose.md",
+      "summary": "AndroidX 新范式：将 Compose UI 序列化传输到客户端原生渲染，支持动态内容、热修复和 A/B 测试。",
+      "category": "平台与工程",
+      "order": 40
+    },
+    {
+      "slug": "accompanist",
+      "title": "Accompanist 工具库集",
+      "path": "docs/accompanist.md",
+      "summary": "权限请求、系统 UI 控制、Drawable 渲染等官方未覆盖能力的补充工具库。",
+      "category": "平台与工程",
+      "order": 41
+    },
+    {
+      "slug": "camerax-compose",
+      "title": "CameraX 与 Compose",
+      "path": "docs/camerax-compose.md",
+      "summary": "在 Compose 页面中接入相机预览与生命周期管理。",
+      "category": "平台与工程",
+      "order": 42
+    },
+    {
+      "slug": "media3-compose",
+      "title": "Media3 播放器集成",
+      "path": "docs/media3-compose.md",
+      "summary": "在 Compose 中承载播放器并管理播放状态。",
+      "category": "平台与工程",
+      "order": 43
+    },
+    {
+      "slug": "drag-and-drop",
+      "title": "Compose 拖放交互",
+      "path": "docs/drag-and-drop.md",
+      "summary": "组织拖拽来源、投放目标与结果反馈。",
+      "category": "平台与工程",
+      "order": 44
+    },
+    {
+      "slug": "testing",
+      "title": "Compose 测试最佳实践",
+      "path": "docs/testing.md",
+      "summary": "UI 测试、节点匹配与交互校验的基础套路。",
+      "category": "平台与工程",
+      "order": 45
+    },
+    {
+      "slug": "compose-xr",
+      "title": "Jetpack Compose XR 空间计算",
+      "path": "docs/compose-xr.md",
+      "summary": "Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。",
+      "category": "平台与工程",
+      "order": 46
+    }
+  ]
+}

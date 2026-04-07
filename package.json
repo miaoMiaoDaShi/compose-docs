@@ -4,8 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "generate:docs-index": "node scripts/generate-docs-index.mjs",
+    "dev": "npm run generate:docs-index && vite",
+    "prerender:routes": "node scripts/prerender-routes.mjs",
+    "generate:seo-assets": "node scripts/generate-seo-assets.mjs",
+    "build": "npm run generate:docs-index && vite build && npm run prerender:routes && npm run generate:seo-assets",
     "preview": "vite preview"
   },
   "dependencies": {
