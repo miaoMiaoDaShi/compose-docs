@@ -28,6 +28,13 @@ const createSlugger = () => {
   }
 }
 
+const escapeAttribute = (value) =>
+  String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+
 export const parseMarkdown = (markdownSource) => {
   const source = markdownSource || ''
   const headings = []
@@ -36,6 +43,7 @@ export const parseMarkdown = (markdownSource) => {
 
   renderer.heading = (text, level, raw) => {
     const id = slug(raw)
+    const safeText = escapeAttribute(raw)
 
     if (level === 2 || level === 3) {
       headings.push({
@@ -45,7 +53,7 @@ export const parseMarkdown = (markdownSource) => {
       })
     }
 
-    return `<h${level} id="${id}">${text}</h${level}>`
+    return `<h${level} id="${id}" class="doc-heading"><a class="doc-heading-anchor" href="#${id}" aria-label="复制并跳转到 ${safeText}">#</a><span>${text}</span></h${level}>`
   }
 
   const parser = new Marked(

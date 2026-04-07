@@ -65,6 +65,10 @@
           </div>
         </section>
 
+        <div v-if="state === 'ready'" class="reading-progress-bar" aria-hidden="true">
+          <div class="reading-progress-value" :style="{ width: `${readingProgress}%` }"></div>
+        </div>
+
         <section v-if="state === 'ready' && tocHeadings.length" class="inline-toc">
           <div class="panel-head">
             <div>
@@ -81,6 +85,7 @@
               :href="`#${heading.id}`"
               class="inline-toc-link"
               :class="{ nested: heading.level === 3, active: activeHeadingId === heading.id }"
+              @click.prevent="jumpToHeading(heading.id)"
             >
               {{ heading.text }}
             </a>
@@ -126,16 +131,26 @@
             <strong>{{ nextDoc?.title || '已经是最后一篇' }}</strong>
           </button>
         </nav>
+
+        <button
+          v-if="showBackToTop"
+          type="button"
+          class="back-to-top"
+          @click="scrollToTop"
+        >
+          回到顶部
+        </button>
       </main>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, nextTick, onBeforeUnmount, ref, watch, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useDocContent } from '../composables/useDocContent'
 import { useDocsIndex } from '../composables/useDocsIndex'
+import { useReadingNavigation } from '../composables/useReadingNavigation'
 import { useReaderNavigation } from '../composables/useReaderNavigation'
 import { useSeo } from '../composables/useSeo'
 import { parseMarkdown } from '../lib/markdown'
@@ -158,8 +173,18 @@ const parsedContent = computed(() => parseMarkdown(content.value || '# 暂无内
 const renderedContent = computed(() => parsedContent.value.html)
 const tocHeadings = computed(() => parsedContent.value.headings)
 const articleRef = ref(null)
-const activeHeadingId = ref('')
-let headingObserver = null
+const {
+  activeHeadingId,
+  readingProgress,
+  showBackToTop,
+  jumpToHeading,
+  scrollToTop,
+} = useReadingNavigation({
+  articleRef,
+  headings: tocHeadings,
+  state,
+  slug,
+})
 
 watchEffect(() => {
   const canonical = `${siteUrl}/docs/${slug.value}`
@@ -180,60 +205,9 @@ watchEffect(() => {
   })
 })
 
-function disconnectObserver() {
-  if (headingObserver) {
-    headingObserver.disconnect()
-    headingObserver = null
-  }
-}
-
-async function syncHeadingObserver() {
-  disconnectObserver()
-
-  if (viewState.value !== 'ready' || !articleRef.value || !tocHeadings.value.length) {
-    activeHeadingId.value = ''
-    return
-  }
-
-  await nextTick()
-
-  const headings = Array.from(articleRef.value.querySelectorAll('h2[id], h3[id]'))
-  if (!headings.length) {
-    activeHeadingId.value = ''
-    return
-  }
-
-  activeHeadingId.value = headings[0].id
-
-  headingObserver = new IntersectionObserver(
-    (entries) => {
-      const visibleHeadings = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((left, right) => left.boundingClientRect.top - right.boundingClientRect.top)
-
-      if (visibleHeadings.length) {
-        activeHeadingId.value = visibleHeadings[0].target.id
-        return
-      }
-
-      const passedHeadings = headings.filter((heading) => heading.getBoundingClientRect().top <= 140)
-      if (passedHeadings.length) {
-        activeHeadingId.value = passedHeadings[passedHeadings.length - 1].id
-      }
-    },
-    {
-      rootMargin: '-96px 0px -55% 0px',
-      threshold: [0, 1],
-    },
-  )
-
-  headings.forEach((heading) => headingObserver.observe(heading))
-}
-
 async function hydrate() {
   viewState.value = 'loading'
   errorMessage.value = ''
-  activeHeadingId.value = ''
 
   try {
     await loadIndex()
@@ -260,12 +234,4 @@ function goToDoc(target) {
 watch(slug, () => {
   hydrate()
 }, { immediate: true })
-
-watch([state, tocHeadings], () => {
-  syncHeadingObserver()
-})
-
-onBeforeUnmount(() => {
-  disconnectObserver()
-})
 </script>
