@@ -140,13 +140,56 @@
         >
           回到顶部
         </button>
+
+        <button
+          v-if="state === 'ready' && tocHeadings.length"
+          type="button"
+          class="mobile-toc-trigger"
+          @click="toggleMobileToc(true)"
+        >
+          目录
+        </button>
       </main>
     </div>
+
+    <div
+      v-if="isMobileTocOpen"
+      class="mobile-toc-overlay"
+      @click="toggleMobileToc(false)"
+    ></div>
+
+    <aside
+      v-if="state === 'ready' && tocHeadings.length"
+      class="mobile-toc-drawer"
+      :class="{ open: isMobileTocOpen }"
+      aria-label="移动端文内目录"
+    >
+      <div class="mobile-toc-header">
+        <div>
+          <span class="panel-label">文内目录</span>
+          <h2>快速跳到当前章节</h2>
+        </div>
+        <button type="button" class="mobile-toc-close" @click="toggleMobileToc(false)">关闭</button>
+      </div>
+
+      <nav class="mobile-toc-list">
+        <a
+          v-for="heading in tocHeadings"
+          :key="heading.id"
+          :href="`#${heading.id}`"
+          class="mobile-toc-link"
+          :class="{ nested: heading.level === 3, active: activeHeadingId === heading.id }"
+          @click.prevent="handleMobileTocJump(heading.id)"
+        >
+          {{ heading.text }}
+        </a>
+      </nav>
+    </aside>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, onBeforeUnmount, ref, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useDocContent } from '../composables/useDocContent'
 import { useDocsIndex } from '../composables/useDocsIndex'
@@ -173,6 +216,7 @@ const parsedContent = computed(() => parseMarkdown(content.value || '# 暂无内
 const renderedContent = computed(() => parsedContent.value.html)
 const tocHeadings = computed(() => parsedContent.value.headings)
 const articleRef = ref(null)
+const isMobileTocOpen = ref(false)
 const {
   activeHeadingId,
   readingProgress,
@@ -225,6 +269,16 @@ async function hydrate() {
   }
 }
 
+function toggleMobileToc(open) {
+  isMobileTocOpen.value = open
+  document.body.classList.toggle('mobile-toc-open', open)
+}
+
+function handleMobileTocJump(id) {
+  jumpToHeading(id)
+  toggleMobileToc(false)
+}
+
 function goToDoc(target) {
   if (target?.slug) {
     router.push({ name: 'doc', params: { slug: target.slug } })
@@ -232,6 +286,11 @@ function goToDoc(target) {
 }
 
 watch(slug, () => {
+  toggleMobileToc(false)
   hydrate()
 }, { immediate: true })
+
+onBeforeUnmount(() => {
+  document.body.classList.remove('mobile-toc-open')
+})
 </script>
