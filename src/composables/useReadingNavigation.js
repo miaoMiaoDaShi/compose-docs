@@ -103,6 +103,12 @@ export function useReadingNavigation({ articleRef, headings, state, slug }) {
     window.scrollTo({ top: Math.max(top, 0), behavior })
     activeHeadingId.value = id
     history.replaceState(null, '', `#${id}`)
+
+    // Make deep-linked headings announceable to keyboard and assistive tech users.
+    if (!target.hasAttribute('tabindex')) {
+      target.setAttribute('tabindex', '-1')
+    }
+    target.focus({ preventScroll: true })
     return true
   }
 

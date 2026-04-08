@@ -75,6 +75,58 @@ export const parseMarkdown = (markdownSource) => {
   }
 }
 
+const escapeRegExp = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+export const highlightHtml = (html, query) => {
+  const keyword = String(query || '').trim()
+
+  if (!keyword || typeof window === 'undefined' || typeof DOMParser === 'undefined') {
+    return html
+  }
+
+  const parser = new DOMParser()
+  const documentFragment = parser.parseFromString(`<div>${html}</div>`, 'text/html')
+  const root = documentFragment.body.firstElementChild
+
+  if (!root) {
+    return html
+  }
+
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
+  const pattern = new RegExp(`(${escapeRegExp(keyword)})`, 'gi')
+  const textNodes = []
+
+  while (walker.nextNode()) {
+    const node = walker.currentNode
+    const parentTag = node.parentElement?.tagName
+
+    if (!node.textContent?.trim()) {
+      continue
+    }
+
+    if (['MARK', 'CODE', 'PRE', 'A', 'BUTTON', 'SCRIPT', 'STYLE'].includes(parentTag || '')) {
+      continue
+    }
+
+    if (!pattern.test(node.textContent)) {
+      pattern.lastIndex = 0
+      continue
+    }
+
+    pattern.lastIndex = 0
+    textNodes.push(node)
+  }
+
+  for (const node of textNodes) {
+    const markup = node.textContent.replace(pattern, '<mark class="search-highlight">$1</mark>')
+    const wrapper = document.createElement('span')
+    wrapper.innerHTML = markup
+    node.parentNode?.replaceChild(wrapper, node)
+  }
+
+  return root.innerHTML
+}
+
 export const extractHeadings = (markdownSource) => {
   const source = markdownSource || ''
   const tokens = Lexer.lex(source)
