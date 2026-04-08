@@ -4,7 +4,7 @@
 >
 > 适用版本：Kotlin 2.0+ / Compose Compiler 1.5.4+
 >
-> 更新时间：2026-04-07
+> 更新时间：2026-04-09
 >
 > 标签：性能，Kotlin2，StrongSkipping，PausableComposition，ComposeCompiler，Kotlin2.3.20
 
@@ -115,6 +115,12 @@ class PausableComposition {
 - `PausableComposition` 是内部 API，Compose 自动管理，无需手动调用
 - 对大多数场景无感知，但对滚动帧率分析工具提出了新要求（分析时需考虑跨帧分布）
 - 低端设备受益最明显：减少滚动卡顿，提升交互流畅度
+
+**Bug Fix（Compose Runtime 1.11.0-beta02，2026 年 3 月 25 日）：**
+
+`compose-runtime:1.11.0-beta02` 修复了 Pausable Composition 内部状态的一个**竞态条件（race condition）**。该问题在快速滚动 + 配置变更（如屏幕旋转）并发时可能导致组合结果不一致或偶发的 `IllegalStateException`。此次修复确保 `PausableComposition` 在多帧任务切换时的内部状态完整性，对使用 Kotlin 2.3.20+ 且启用了 Pausable Composition 的应用有直接影响。
+
+> **影响评估**：如果你使用了 Kotlin 2.3.20 并默认受益于 Pausable Composition，建议升级到 `compose-runtime:1.11.0-beta02` 或更高版本。此问题仅在高频滚动与配置变更重叠时触发，触发概率较低，但一旦触发会导致 UI 状态异常。
 
 ### Kotlin 2.3.20 Compose 堆栈追踪增强
 
