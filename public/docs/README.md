@@ -1,5 +1,5 @@
 # Compose 文档索引
-> 最后更新: 2026-04-12 18:00
+> 最后更新: 2026-04-14 18:06
 ## 使用说明
 这个目录现在只承担索引与维护入口，不再直接承载所有知识点正文。
 - `README.md` 负责分类导航、最近更新和维护入口。
@@ -62,7 +62,7 @@
 - [Compose 测试最佳实践](./testing.md) - UI 测试、节点匹配与交互校验的基础套路。
 - [Jetpack Compose XR 空间计算](./compose-xr.md) - Android XR SDK 声明式 UI 框架，用 Compose API 构建 SpatialPanel、Orbiter 等空间计算界面。
 ## 最近更新
-- 2026-04-12：例行维护扫描（午间/傍晚）— Web 搜索（Tavily）今日持续触发用量限制（Error 432），主要技术博客内容源直接抓取均被屏蔽（JetBrains Blog、Android Developers Blog、ProAndroidDev、Medium）。**Compose 最新稳定 BOM 仍为 2026.03.01**（Compose 1.10.5，March 11, 2026），**Beta 为 1.11.0-beta02**（March 25, 2026），**Compose 1.11 正式版尚待发布**。**Compose Multiplatform 最新稳定版为 1.10.3**（2026-03-19，小补丁版本，修复 Matrix 旋转变换逻辑）。所有既有文档知识点已覆盖本次可扫描范围，无需新增或修改。
+- 2026-04-14：例行维护扫描 — **Compose Multiplatform 1.11.0-beta02** 于 2026-04-10 发布，主要更新：**Compose UI Tests v2 API**（`runComposeUiTestV2` 替代旧 API，`StandardTestDispatcher` 取代 `UnconfinedTestDispatcher`）；**Hot Reload 升级至 1.1.0-beta02**；**Kotlin 2.3.20 强制要求**（Web/JS/Wasm 目标）；大量 **iOS TextField 修复**（triple tap 崩溃、自动补全崩溃、换行末尾光标丢失、`Ctrl+Home`/`Cmd+Home`/`End` 快捷键、`UIWindowSceneGeometry` 缺失崩溃、Autofill 菜单异常）；Desktop 修复（对话框内存泄漏、Accessibility 性能提升、场景关闭任务清理）；Web 修复（PathMeasure getSegment 路径回归、emoji 删除、身份哈希码缓存）。已更新 [Compose Multiplatform 跨平台开发](./compose-multiplatform.md)，新增「Compose UI Tests v2 API」章节，补充 Hot Reload 版本历史和 Web Kotlin 2.3.20 要求，追加 iOS TextField 问题修复列表。
 - 2026-04-12（傍晚追加）：Web 搜索全天受限，尝试直接 fetch Android Developers / JetBrains 博客同样被屏蔽（Private IP）。文档站已收录最新 Compose BOM 1.10.5 / Compose Multiplatform 1.10.3 全部知识点，现有 36 篇文档无需修订。
 - 2026-04-11：例行维护扫描（午间）— Web 搜索（Tavily）今日再次触发用量限制（Error 432），JetBrains 博客、Android Developers 博客、ProAndroidDev、Medium 等多个内容源直接抓取均被屏蔽。**Compose 最新稳定 BOM 仍为 2026.03.01**（Compose 1.10.5，March 11, 2026），**Beta 为 1.11.0-beta02**（March 25, 2026），**Compose 1.11 正式版尚待发布**。所有既有文档知识点已覆盖本次可扫描范围，无需新增或修改。
 - 2026-04-07：例行维护扫描 — 确认 **Compose 最新稳定 BOM 仍为 2026.03.01**（Compose 1.10.5），**Beta 为 1.11.0-beta02**（2026-03-25）。Compose 1.11 正式版尚待发布。**Compose Multiplatform 1.10.3**（2026-03-19）已发布，为小补丁版本，主要修复：移除 Matrix 旋转变换中不正确的"任意变换"检测逻辑（行为现已与 Android 保持一致）[#2860](https://github.com/JetBrains/compose-multiplatform/issues/2860)；内置 Jetpack Runtime 1.10.5 / UI 1.10.5 / Foundation 1.10.5，Navigation3 更新至 1.0.0-alpha06，Navigation Event 更新至 1.0.2。所有本次扫描涉及的新特性均已在现有文档中覆盖，无需新增或修改。
